@@ -214,6 +214,27 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
 .rb-w{background:rgba(0,120,212,.14);color:#60a5fa;border:1px solid rgba(0,120,212,.22)}
 .rb-m{background:rgba(82,201,122,.11);color:var(--green);border:1px solid rgba(82,201,122,.22)}
 .rb-a{background:var(--aglow);color:var(--alight);border:1px solid rgba(124,111,247,.28)}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--R);padding:14px 16px;}
+.stat-val{font-size:26px;font-weight:700;color:var(--alight);line-height:1;margin-bottom:4px;}
+.stat-lbl{font-size:11px;color:var(--muted);}
+.hist-item{background:var(--card);border:1px solid var(--border);border-radius:var(--R);padding:14px 16px;margin-bottom:10px;transition:border-color .18s;}
+.hist-item:hover{border-color:var(--border2);}
+.hist-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.hist-icon{width:36px;height:36px;min-width:36px;background:var(--aglow);border:1px solid rgba(124,111,247,.25);border-radius:var(--Rs);display:flex;align-items:center;justify-content:center;color:var(--alight);}
+.hist-text{flex:1;min-width:0;font-size:14px;font-family:'PingFang SC','Microsoft YaHei',sans-serif;color:var(--text);line-height:1.7;letter-spacing:1px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.hist-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.hist-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:500;}
+.hist-tag.model{background:var(--aglow);color:var(--alight);border:1px solid rgba(124,111,247,.25);}
+.hist-tag.size{background:var(--card2);color:var(--muted);border:1px solid var(--border);}
+.hist-tag.time{background:var(--card2);color:var(--dim);border:1px solid var(--border);}
+.hist-actions{display:flex;gap:7px;}
+.hist-btn{display:inline-flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border);border-radius:var(--Rs);color:var(--muted);font-size:11px;font-weight:500;padding:6px 11px;cursor:pointer;transition:all .18s;}
+.hist-btn:hover{background:var(--card3);color:var(--text);border-color:var(--border2);}
+.hist-btn.play{color:var(--green);border-color:rgba(82,201,122,.3);}
+.hist-btn.play:hover{background:rgba(82,201,122,.1);}
+.hist-btn.del{color:var(--red);border-color:rgba(240,106,106,.25);}
+.hist-btn.del:hover{background:rgba(240,106,106,.08);}
+.hist-empty{text-align:center;padding:60px 20px;}
 </style>
 </head>
 <body>
@@ -236,6 +257,10 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
   <div class="nav-item" id="nav-voices" onclick="go('voices')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
     Thêm giọng nói
+  </div>
+  <div class="nav-item" id="nav-history" onclick="go('history')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Lịch sử xuất file
   </div>
   <div class="sidebar-foot">
     Hoạt động offline<br>
@@ -470,7 +495,7 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
             <div class="sec">Kết quả nhận diện</div>
             <div id="ocrRes" style="display:none;">
               <div id="confRow" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;"></div>
-              <textarea id="ocrTxt" style="font-size:18px;min-height:150px;border-color:var(--border);" placeholder="Văn bản nhận diện..."></textarea>
+              <textarea id="ocrTxt" style="font-size:18px;min-height:80px;height:auto;overflow:hidden;resize:none;border-color:var(--border);" placeholder="Văn bản nhận diện..."></textarea>
               <div class="btn-grp">
                 <button class="btn btn-ghost" style="background:rgba(62,201,192,.1);color:var(--teal);border-color:rgba(62,201,192,.3);padding:9px 16px;font-size:12px;" onclick="copyOcr()">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
@@ -580,22 +605,73 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
       </div>
     </div><!-- /voices -->
 
+    <!-- ══════════ HISTORY PAGE ══════════ -->
+    <div class="page" id="pageHistory">
+
+      <!-- Header row -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);">Lịch sử xuất file</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="histCount">Đang tải...</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px;" onclick="exportHistoryCSV()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất CSV
+          </button>
+          <button class="btn btn-ghost" style="padding:8px 14px;font-size:12px;color:var(--red);border-color:rgba(240,106,106,.3);" onclick="clearAllHistory()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
+            Xóa tất cả
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;" id="histStats"></div>
+
+      <!-- Filter bar -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="position:relative;flex:1;min-width:200px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="histSearch" type="text" placeholder="Tìm theo văn bản..." oninput="renderHistory()"
+            style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:var(--Rs);color:var(--text);font-size:12px;padding:7px 10px 7px 32px;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <div style="display:flex;gap:5px;">
+          <button class="gtab active" data-f="all"     onclick="histFilter('all',this)">Tất cả</button>
+          <button class="gtab" data-f="today"          onclick="histFilter('today',this)">Hôm nay</button>
+          <button class="gtab" data-f="week"           onclick="histFilter('week',this)">Tuần này</button>
+        </div>
+        <div style="display:flex;gap:5px;margin-left:auto;">
+          <button class="gtab active" data-s="desc"    onclick="histSort('desc',this)">Mới nhất</button>
+          <button class="gtab" data-s="asc"            onclick="histSort('asc',this)">Cũ nhất</button>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div id="histList"></div>
+
+    </div><!-- /history -->
+
   </div><!-- content -->
 </div><!-- main -->
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 // ══ NAVIGATION ══
-const PAGES={tts:'Văn bản → Giọng nói',ocr:'Ảnh → Văn bản (OCR)',voices:'Thêm giọng nói'};
-const SUBS={tts:'Nhập chữ Hán, chọn giọng và nhấn Đọc',ocr:'Tải ảnh chứa chữ Hán, nhận diện và sao chép',voices:'Hướng dẫn cài thêm giọng tiếng Trung miễn phí'};
+const PAGES={tts:'Văn bản → Giọng nói',ocr:'Ảnh → Văn bản (OCR)',voices:'Thêm giọng nói',history:'Lịch sử xuất file'};
+const SUBS={tts:'Nhập chữ Hán, chọn giọng và nhấn Đọc',ocr:'Tải ảnh chứa chữ Hán, nhận diện và sao chép',voices:'Hướng dẫn cài thêm giọng tiếng Trung miễn phí',history:'Xem lại và tải lại các file WAV đã tổng hợp'};
 function go(tab){
-  ['tts','ocr','voices'].forEach(t=>{
-    document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('on',t===tab);
-    document.getElementById('nav-'+t).classList.toggle('active',t===tab);
+  ['tts','ocr','voices','history'].forEach(t=>{
+    const pg=document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1));
+    if(pg) pg.classList.toggle('on',t===tab);
+    const nav=document.getElementById('nav-'+t);
+    if(nav) nav.classList.toggle('active',t===tab);
   });
   document.getElementById('tb-title').textContent=PAGES[tab];
   document.getElementById('tb-sub').textContent=SUBS[tab];
   if(tab==='voices'){detectOS();rescan();}
+  if(tab==='history'){renderHistory();}
 }
 
 // ══ TTS ══
@@ -786,6 +862,18 @@ async function doExport(){
     const url=URL.createObjectURL(wavBlob);
     const fname='piper_'+Date.now()+'.wav';
     const sizeKB=Math.round(wavBlob.size/1024);
+
+    // ── Save to history ──
+    saveHistory({
+      id: Date.now(),
+      text: txt,
+      model: vModel,
+      fname: fname,
+      sizeKB: sizeKB,
+      ts: Date.now(),
+      blobData: await blobToBase64(wavBlob)   // store audio for replay
+    });
+
     const a=document.createElement('a'); a.href=url; a.download=fname;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     expRes.style.display='';
@@ -814,7 +902,220 @@ async function doExport(){
   exportBtn.disabled=false;
 }
 
+// ── Convert Blob → base64 for localStorage storage ──
+function blobToBase64(blob){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.readAsDataURL(blob);
+  });
+}
+
 setVits('','Nhấn "Tải model" để chuẩn bị · Tải 1 lần, dùng mãi');
+
+// ══ HISTORY ══
+const HIST_KEY = 'zh_tts_history';
+let histFilterVal='all', histSortVal='desc';
+
+function loadHistoryData(){
+  try{ return JSON.parse(localStorage.getItem(HIST_KEY)||'[]'); }
+  catch{ return []; }
+}
+
+function saveHistory(entry){
+  try{
+    const data = loadHistoryData();
+    data.unshift(entry);               // newest first
+    // Keep max 100 entries; if total base64 data > 50MB, trim oldest
+    let trimmed = data.slice(0, 100);
+    // Rough size check — if too big, drop audio from old entries
+    let jsonStr = JSON.stringify(trimmed);
+    if(jsonStr.length > 40*1024*1024){  // 40MB limit
+      trimmed = trimmed.map((e,i)=> i>20 ? {...e, blobData:null} : e);
+    }
+    localStorage.setItem(HIST_KEY, JSON.stringify(trimmed));
+  }catch(e){
+    // localStorage quota exceeded — drop audio data from all entries
+    try{
+      const data = loadHistoryData().map(e=>({...e,blobData:null}));
+      data.unshift({...entry, blobData:null});
+      localStorage.setItem(HIST_KEY, JSON.stringify(data.slice(0,50)));
+    }catch{}
+  }
+}
+
+function deleteHistEntry(id){
+  const data = loadHistoryData().filter(e=>e.id!==id);
+  localStorage.setItem(HIST_KEY, JSON.stringify(data));
+  renderHistory();
+}
+
+function clearAllHistory(){
+  if(!confirm('Xóa toàn bộ lịch sử? Hành động này không thể hoàn tác.')) return;
+  localStorage.removeItem(HIST_KEY);
+  renderHistory();
+}
+
+function histFilter(f, btn){
+  histFilterVal=f;
+  document.querySelectorAll('[data-f]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+}
+
+function histSort(s, btn){
+  histSortVal=s;
+  document.querySelectorAll('[data-s]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+}
+
+function formatTs(ts){
+  const d=new Date(ts);
+  const now=new Date();
+  const diff=now-d;
+  if(diff<60000) return 'Vừa xong';
+  if(diff<3600000) return Math.round(diff/60000)+' phút trước';
+  if(diff<86400000) return Math.round(diff/3600000)+' giờ trước';
+  if(diff<604800000) return Math.round(diff/86400000)+' ngày trước';
+  return d.toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
+function formatFullTs(ts){
+  return new Date(ts).toLocaleString('vi-VN',{
+    year:'numeric',month:'2-digit',day:'2-digit',
+    hour:'2-digit',minute:'2-digit',second:'2-digit'
+  });
+}
+
+function renderHistory(){
+  let data = loadHistoryData();
+  const search = (document.getElementById('histSearch')||{value:''}).value.trim().toLowerCase();
+
+  // Filter by time
+  const now = Date.now();
+  if(histFilterVal==='today'){
+    const start = new Date(); start.setHours(0,0,0,0);
+    data = data.filter(e=>e.ts >= start.getTime());
+  } else if(histFilterVal==='week'){
+    data = data.filter(e=>now-e.ts <= 7*86400000);
+  }
+
+  // Filter by search
+  if(search) data = data.filter(e=>e.text.toLowerCase().includes(search));
+
+  // Sort
+  if(histSortVal==='asc') data = [...data].reverse();
+
+  // Stats
+  const all = loadHistoryData();
+  const totalKB = all.reduce((s,e)=>s+(e.sizeKB||0),0);
+  const models = [...new Set(all.map(e=>e.model))];
+  document.getElementById('histStats').innerHTML = `
+    <div class="stat-card"><div class="stat-val">${all.length}</div><div class="stat-lbl">Tổng số lần xuất</div></div>
+    <div class="stat-card"><div class="stat-val">${totalKB>1024?(totalKB/1024).toFixed(1)+' MB':totalKB+' KB'}</div><div class="stat-lbl">Tổng dung lượng</div></div>
+    <div class="stat-card"><div class="stat-val">${models.length}</div><div class="stat-lbl">Model đã dùng</div></div>
+    <div class="stat-card"><div class="stat-val">${all.length?formatTs(all[0].ts):'—'}</div><div class="stat-lbl">Lần xuất gần nhất</div></div>`;
+
+  document.getElementById('histCount').textContent = data.length
+    ? `${data.length} mục${search?' · kết quả tìm kiếm':''}${histFilterVal!=='all'?' · '+{today:'hôm nay',week:'tuần này'}[histFilterVal]:''}`
+    : 'Không có mục nào';
+
+  const list = document.getElementById('histList');
+  if(!data.length){
+    list.innerHTML=`<div class="hist-empty">
+      <div style="font-size:36px;opacity:.2;margin-bottom:12px;">📂</div>
+      <div style="font-size:14px;font-weight:600;color:var(--muted);margin-bottom:6px;">${search?'Không tìm thấy kết quả':'Chưa có lịch sử'}</div>
+      <div style="font-size:12px;color:var(--dim);">${search?'Thử từ khóa khác':'Tổng hợp một file WAV để bắt đầu'}</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = data.map(e=>{
+    const modelShort = e.model ? e.model.replace('zh_CN-','').replace('zh_HK-','') : 'piper';
+    const textPreview = e.text.length>80 ? e.text.slice(0,80)+'…' : e.text;
+    const hasAudio = !!e.blobData;
+    return `
+    <div class="hist-item" id="hi-${e.id}">
+      <div class="hist-top">
+        <div class="hist-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+        </div>
+        <div class="hist-text" title="${e.text.replace(/"/g,'&quot;')}">${textPreview}</div>
+        <div style="font-size:11px;color:var(--dim);white-space:nowrap;margin-left:8px;">${formatTs(e.ts)}</div>
+      </div>
+      <div class="hist-meta">
+        <span class="hist-tag model">${modelShort}</span>
+        <span class="hist-tag size">${e.sizeKB} KB · WAV</span>
+        <span class="hist-tag time" title="${formatFullTs(e.ts)}">${new Date(e.ts).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>
+        ${!hasAudio?'<span class="hist-tag size" style="color:var(--red);border-color:rgba(240,106,106,.25);">Không có audio</span>':''}
+      </div>
+      ${hasAudio?`<audio controls src="${e.blobData}" style="width:100%;height:30px;accent-color:var(--accent);margin-bottom:8px;"></audio>`:''}
+      <div class="hist-actions">
+        ${hasAudio?`<button class="hist-btn" onclick="redownload(${e.id})" title="Tải lại file WAV">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Tải lại WAV
+        </button>`:''}
+        <button class="hist-btn" onclick="reuseText(${e.id})" title="Dùng lại văn bản này">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Dùng lại TTS
+        </button>
+        <button class="hist-btn" onclick="copyHistText(${e.id})" title="Copy văn bản">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>Copy text
+        </button>
+        <button class="hist-btn del" onclick="deleteHistEntry(${e.id})" title="Xóa mục này" style="margin-left:auto;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>Xóa
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function redownload(id){
+  const e = loadHistoryData().find(x=>x.id===id);
+  if(!e||!e.blobData) return;
+  const a=document.createElement('a');
+  a.href=e.blobData; a.download=e.fname||'tts_'+id+'.wav';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function reuseText(id){
+  const e = loadHistoryData().find(x=>x.id===id);
+  if(!e) return;
+  txEl.value=e.text;
+  counter.textContent=e.text.length+' / 500';
+  go('tts');
+  setTxtStatus('Đã tải văn bản từ lịch sử','ok');
+}
+
+function copyHistText(id){
+  const e = loadHistoryData().find(x=>x.id===id);
+  if(!e) return;
+  navigator.clipboard.writeText(e.text).then(()=>{
+    // brief feedback on the button
+    const btn = document.querySelector(`#hi-${id} .hist-btn:nth-child(3)`);
+    if(btn){ const old=btn.innerHTML; btn.textContent='✓ Đã copy'; setTimeout(()=>btn.innerHTML=old,1500); }
+  });
+}
+
+function exportHistoryCSV(){
+  const data = loadHistoryData();
+  if(!data.length) return;
+  const rows = [['STT','Thời gian','Văn bản','Model','Kích thước (KB)','Tên file']];
+  data.forEach((e,i)=>{
+    rows.push([
+      i+1,
+      new Date(e.ts).toLocaleString('vi-VN'),
+      '"'+e.text.replace(/"/g,'""')+'"',
+      e.model||'',
+      e.sizeKB||0,
+      e.fname||''
+    ]);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='lich_su_tts_'+Date.now()+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
 
 // ══ OCR ══
 let ocrFile=null,ocrLang='chi_sim',ocrRunning=false;
@@ -867,6 +1168,9 @@ async function doOCR(){
     const txt=data.text.trim(), conf=Math.round(data.confidence);
     ocrProg.classList.remove('on');
     ocrTxt.value=txt||'(Không nhận diện được)';
+    // Auto-expand to show full content without scrolling
+    ocrTxt.style.height='auto';
+    ocrTxt.style.height=ocrTxt.scrollHeight+'px';
     ocrRes.style.display='';
     const cc=conf>=70?'hi':conf>=40?'mid':'lo';
     const cl=conf>=70?'✓ Tin cậy cao':conf>=40?'⚡ Trung bình':'⚠ Thấp';
@@ -887,7 +1191,7 @@ function sendToTts(){
   txEl.value=s; counter.textContent=s.length+' / 500';
   go('tts'); setTxtStatus('Đã nhận từ OCR · Nhấn Đọc để bắt đầu','');
 }
-function clearOcrRes(){ocrRes.style.display='none';ocrTxt.value='';confRow.innerHTML='';ocrProg.classList.remove('on');ocrFill.style.width='0%';ocrEmpty.style.display='';}
+function clearOcrRes(){ocrRes.style.display='none';ocrTxt.value='';ocrTxt.style.height='auto';confRow.innerHTML='';ocrProg.classList.remove('on');ocrFill.style.width='0%';ocrEmpty.style.display='';}
 
 // ══ VOICES GUIDE ══
 function detectOS(){
