@@ -264,7 +264,7 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
   </div>
   <div class="sidebar-foot">
     Hoạt động offline<br>
-    <span>Web Speech</span><span>Tesseract</span><span>VITS</span>
+    <span>Piper ONNX</span><span>Tesseract</span>
   </div>
 </aside>
 
@@ -285,7 +285,7 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
     <div class="page on" id="pageTts">
       <div class="cols2">
 
-        <!-- LEFT -->
+        <!-- LEFT: Input -->
         <div>
           <div class="card">
             <div class="sec">Nhập văn bản</div>
@@ -302,143 +302,115 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
               <div class="chip" onclick="setP('谢谢你的帮助！')">谢谢你的帮助！</div>
               <div class="chip" onclick="setP('我想去中国旅行。')">我想去中国旅行。</div>
             </div>
-          </div>
-
-          <div class="card">
-            <div class="sec">Điều chỉnh</div>
-            <div class="cols3">
-              <div class="srow">
-                <div class="slbl">Tốc độ <b id="rv">1.0×</b></div>
-                <input type="range" id="rS" min=".5" max="2" step=".1" value="1"
-                  oninput="rv.textContent=parseFloat(this.value).toFixed(1)+'×'">
-              </div>
-              <div class="srow">
-                <div class="slbl">Cao độ <b id="pv">1.0</b></div>
-                <input type="range" id="pS" min="0" max="2" step=".1" value="1"
-                  oninput="pv.textContent=parseFloat(this.value).toFixed(1)">
-              </div>
-              <div class="srow">
-                <div class="slbl">Âm lượng <b id="vv">100%</b></div>
-                <input type="range" id="vS" min="0" max="1" step=".05" value="1"
-                  oninput="vv.textContent=Math.round(this.value*100)+'%'">
-              </div>
-            </div>
-            <div class="btn-grp">
-              <button class="btn btn-acc" id="speakBtn" onclick="toggleSpeak()">
-                <svg id="spkIco" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                <span id="spkLbl">Đọc văn bản</span>
-              </button>
-              <button class="btn btn-ghost" onclick="clearTts()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
+            <div class="divider"></div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-ghost" onclick="clearTts()" style="padding:9px 16px;font-size:13px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
                 Xóa
               </button>
-              <button class="btn btn-ghost" onclick="copyTts()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
-                Copy
+              <button class="btn btn-ghost" onclick="copyTts()" style="padding:9px 16px;font-size:13px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
+                Sao chép
               </button>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT -->
+        <!-- RIGHT: Model picker + Controls + Actions -->
         <div style="display:flex;flex-direction:column;gap:14px;">
 
-          <!-- Voice picker -->
+          <!-- Model selector -->
           <div class="card">
-            <div class="sec">Chọn giọng đọc</div>
-            <div class="vtab-row">
-              <button class="vtab active" id="vt-sys" onclick="switchVTab('sys')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                Hệ thống
-              </button>
-              <button class="vtab" id="vt-net" onclick="switchVTab('net')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                Google (Online)
-              </button>
-              <div style="margin-left:auto;display:flex;gap:4px;">
-                <button class="gtab active" data-g="all"    onclick="gFilter('all',this)">Tất cả</button>
-                <button class="gtab" data-g="female"        onclick="gFilter('female',this)">♀</button>
-                <button class="gtab" data-g="male"          onclick="gFilter('male',this)">♂</button>
+            <div class="sec">Chọn giọng đọc (Piper ONNX)</div>
+            <div style="display:flex;flex-direction:column;gap:7px;" id="modelList">
+
+              <div class="model-opt active" id="mo-0" onclick="pickModel('zh_CN-huayan-medium',this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;color:var(--text);">Huayan — Nữ, Phổ thông</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:1px;">Chất lượng cao · ~65 MB · zh_CN</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                    <span style="font-size:10px;background:rgba(82,201,122,.1);color:var(--green);border:1px solid rgba(82,201,122,.22);border-radius:4px;padding:2px 7px;">★ Khuyến nghị</span>
+                    <span id="ms-0" style="font-size:10px;color:var(--dim);"></span>
+                  </div>
+                </div>
               </div>
+
+              <div class="model-opt" id="mo-1" onclick="pickModel('zh_CN-huayan-x_low',this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;color:var(--text);">Huayan — Nữ, Nhẹ</div>
+                    <div style="font-size:11px;color:var(--muted);margin-top:1px;">Tải nhanh · ~5 MB · zh_CN</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+                    <span style="font-size:10px;background:rgba(62,201,192,.1);color:var(--teal);border:1px solid rgba(62,201,192,.22);border-radius:4px;padding:2px 7px;">⚡ Nhanh</span>
+                    <span id="ms-1" style="font-size:10px;color:var(--dim);"></span>
+                  </div>
+                </div>
+              </div>
+
             </div>
-            <div id="vp-sys">
-              <div class="vlist" id="vGrid"></div>
-            </div>
-            <div id="vp-net" style="display:none;">
-              <div style="font-size:11px;color:var(--teal);background:rgba(62,201,192,.07);border:1px solid rgba(62,201,192,.18);border-radius:var(--Rs);padding:8px 10px;margin-bottom:8px;">✦ Giọng Neural chất lượng cao · Cần Chrome + internet</div>
-              <div class="vlist" id="vGridNet"></div>
-            </div>
+
+            <!-- Model status + download progress -->
             <div class="divider"></div>
             <div class="sbar">
-              <div class="wv-wrap"><div class="wv" id="w1"></div><div class="wv" id="w2"></div><div class="wv" id="w3"></div><div class="wv" id="w4"></div><div class="wv" id="w5"></div><div class="wv" id="w6"></div><div class="wv" id="w7"></div></div>
-              <span id="sTxt" style="font-size:12px;color:var(--muted);flex:1;">Sẵn sàng</span>
+              <div class="sdot" id="vitsDot"></div>
+              <span id="vitsMsg" style="font-size:12px;color:var(--muted);flex:1;">Nhấn "Tải model" để bắt đầu</span>
+            </div>
+            <div id="dlWrap" style="display:none;flex-direction:column;gap:5px;margin-top:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+                <span id="dlLbl">Đang tải...</span><span id="dlPct">0%</span>
+              </div>
+              <div class="prog-bg"><div class="prog-fill blue" id="dlFill"></div></div>
             </div>
           </div>
 
-          <!-- Export card -->
+          <!-- Actions card -->
           <div class="card">
-            <div class="sec">Xuất file WAV — Offline AI</div>
-            <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="sec">Thao tác</div>
 
-              <!-- Model choice -->
-              <div class="model-opt active" id="mo-med" onclick="pickModel('zh_CN-huayan-medium',this)">
-                <div style="display:flex;align-items:center;gap:9px;">
-                  <div class="vdot"></div>
-                  <div style="flex:1;">
-                    <div style="font-size:12.5px;font-weight:600;color:var(--text);">Huayan Medium</div>
-                    <div style="font-size:11px;color:var(--muted);">Piper ONNX · ~65 MB · Tải 1 lần · Cache mãi</div>
-                  </div>
-                  <span style="font-size:10px;background:rgba(82,201,122,.1);color:var(--green);border:1px solid rgba(82,201,122,.22);border-radius:4px;padding:2px 7px;">★ Khuyến nghị</span>
-                </div>
-              </div>
-              <div class="model-opt" id="mo-xl" onclick="pickModel('zh_CN-huayan-x_low',this)">
-                <div style="display:flex;align-items:center;gap:9px;">
-                  <div class="vdot"></div>
-                  <div style="flex:1;">
-                    <div style="font-size:12.5px;font-weight:600;color:var(--text);">Huayan X-Low</div>
-                    <div style="font-size:11px;color:var(--muted);">Piper ONNX · ~5 MB · Tải nhanh hơn</div>
-                  </div>
-                  <span style="font-size:10px;background:rgba(62,201,192,.1);color:var(--teal);border:1px solid rgba(62,201,192,.22);border-radius:4px;padding:2px 7px;">⚡ Nhanh</span>
-                </div>
-              </div>
-
-              <!-- Engine status row -->
-              <div class="sbar" style="cursor:default;">
-                <div class="sdot" id="vitsDot"></div>
-                <span id="vitsMsg" style="font-size:12px;color:var(--muted);flex:1;">Chưa tải model</span>
-              </div>
-
-              <!-- Download progress -->
-              <div id="dlWrap" style="display:none;flex-direction:column;gap:5px;">
-                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
-                  <span id="dlLbl">Đang tải...</span><span id="dlPct">0%</span>
-                </div>
-                <div class="prog-bg"><div class="prog-fill blue" id="dlFill"></div></div>
-              </div>
-
-              <!-- Synth progress -->
-              <div id="synWrap" style="display:none;flex-direction:column;gap:5px;">
-                <div style="font-size:11px;color:var(--muted);" id="synLbl">Đang tổng hợp...</div>
-                <div class="prog-bg"><div class="prog-fill green ind" id="synFill"></div></div>
-              </div>
-
-              <!-- Buttons -->
-              <div style="display:flex;gap:8px;">
-                <button class="btn btn-ghost" id="loadBtn" onclick="loadModel()" style="gap:6px;padding:9px 14px;font-size:12px;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                  <span id="loadLbl">Tải model</span>
-                </button>
-                <button class="btn btn-acc" id="exportBtn" onclick="doExport()" disabled style="background:rgba(82,201,122,.15);color:var(--green);border:1px solid rgba(82,201,122,.3);">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
-                  <span id="exportLbl">Tổng hợp & Tải WAV</span>
-                </button>
-              </div>
-
-              <!-- Result -->
-              <div id="expRes" style="display:none;"></div>
-
-              <div class="info-box">Chạy 100% trong trình duyệt · Không cần server · Model lưu vĩnh viễn sau khi tải</div>
+            <!-- Synth progress -->
+            <div id="synWrap" style="display:none;flex-direction:column;gap:5px;margin-bottom:10px;">
+              <div style="font-size:11px;color:var(--muted);" id="synLbl">Đang tổng hợp...</div>
+              <div class="prog-bg"><div class="prog-fill green ind"></div></div>
             </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <!-- Load model button -->
+              <button class="btn btn-ghost" id="loadBtn" onclick="loadModel()" style="width:100%;justify-content:center;gap:8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span id="loadLbl">Tải model</span>
+              </button>
+
+              <!-- Preview + Export row -->
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-acc" id="previewBtn" onclick="doPreview()" disabled
+                  style="flex:1;background:rgba(124,111,247,.15);color:var(--alight);border:1px solid rgba(124,111,247,.3);">
+                  <svg id="prvIco" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <span id="prvLbl">Nghe thử</span>
+                </button>
+                <button class="btn btn-acc" id="exportBtn" onclick="doExport()" disabled
+                  style="flex:1;background:rgba(82,201,122,.15);color:var(--green);border:1px solid rgba(82,201,122,.3);">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                  <span id="exportLbl">Tải WAV</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Result -->
+            <div id="expRes" style="display:none;margin-top:10px;"></div>
+
+            <div class="info-box" style="margin-top:10px;">Piper ONNX · Chạy 100% offline trong trình duyệt · Nghe và xuất cùng một giọng · Model cache vĩnh viễn sau lần tải đầu</div>
+          </div>
+
+          <!-- Global status -->
+          <div class="sbar">
+            <div class="wv-wrap"><div class="wv" id="w1"></div><div class="wv" id="w2"></div><div class="wv" id="w3"></div><div class="wv" id="w4"></div><div class="wv" id="w5"></div><div class="wv" id="w6"></div><div class="wv" id="w7"></div></div>
+            <span id="sTxt" style="font-size:12px;color:var(--muted);flex:1;">Sẵn sàng</span>
+            <div class="sdot" id="gDot"></div>
           </div>
 
         </div>
@@ -495,7 +467,7 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
             <div class="sec">Kết quả nhận diện</div>
             <div id="ocrRes" style="display:none;">
               <div id="confRow" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px;"></div>
-              <textarea id="ocrTxt" style="font-size:18px;min-height:80px;height:auto;overflow:hidden;resize:none;border-color:var(--border);" placeholder="Văn bản nhận diện..."></textarea>
+              <textarea id="ocrTxt" style="font-size:18px;min-height:80px;height:auto;overflow:hidden;resize:vertical;border-color:var(--border);" placeholder="Văn bản nhận diện..." oninput="autoResize(this)"></textarea>
               <div class="btn-grp">
                 <button class="btn btn-ghost" style="background:rgba(62,201,192,.1);color:var(--teal);border-color:rgba(62,201,192,.3);padding:9px 16px;font-size:12px;" onclick="copyOcr()">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
@@ -659,6 +631,10 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 // ══ NAVIGATION ══
+function autoResize(el){
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
 const PAGES={tts:'Văn bản → Giọng nói',ocr:'Ảnh → Văn bản (OCR)',voices:'Thêm giọng nói',history:'Lịch sử xuất file'};
 const SUBS={tts:'Nhập chữ Hán, chọn giọng và nhấn Đọc',ocr:'Tải ảnh chứa chữ Hán, nhận diện và sao chép',voices:'Hướng dẫn cài thêm giọng tiếng Trung miễn phí',history:'Xem lại và tải lại các file WAV đã tổng hợp'};
 function go(tab){
@@ -675,243 +651,274 @@ function go(tab){
 }
 
 // ══ TTS ══
-let selVoice=null,speaking=false,allZh=[],gFilterVal='all',vtabVal='sys';
-const txEl=document.getElementById('inputText');
-txEl.addEventListener('input',()=>{
-  const l=txEl.value.length;
-  counter.textContent=l+' / 500';
-  counter.className='counter'+(l>450?' lim':'');
+const txEl = document.getElementById('inputText');
+txEl.addEventListener('input', () => {
+  const l = txEl.value.length;
+  counter.textContent = l + ' / 500';
+  counter.className = 'counter' + (l > 450 ? ' lim' : '');
 });
-function setTxtStatus(msg,type){
-  sTxt.textContent=msg; gTxt.textContent=msg;
-  gDot.className='sdot'+(type?' '+type:'');
-  document.querySelectorAll('.wv').forEach(d=>type==='on'?d.classList.add('on'):(d.classList.remove('on'),d.style.height='3px'));
+
+function setTxtStatus(msg, type) {
+  sTxt.textContent = msg;
+  gTxt.textContent = msg;
+  gDot.className = 'sdot' + (type ? ' ' + type : '');
+  document.querySelectorAll('.wv').forEach(d =>
+    type === 'on' ? d.classList.add('on') : (d.classList.remove('on'), d.style.height = '3px')
+  );
 }
-function guessG(n){
-  const s=n.toLowerCase();
-  if(/xiao|xia|ting|mei|yan|lin|hui|jing|fang|sinji|hiugaai|hiumaan|female|woman/.test(s)) return 'f';
-  if(/gang|yun|wei|long|qiang|jun|yang|male|man|wanlung|yunxi(?!a)/.test(s)) return 'm';
-  return '';
-}
-function gBadge(g){
-  if(g==='f') return '<span class="gbadge f">♀</span>';
-  if(g==='m') return '<span class="gbadge m">♂</span>';
-  return '';
-}
-function renderVoices(voices,gridId){
-  const g=document.getElementById(gridId);
-  if(!voices.length){g.innerHTML='<div class="no-v">Không tìm thấy giọng nào.</div>';return;}
-  g.innerHTML='';
-  voices.forEach((v,i)=>{
-    const gv=guessG(v.name);
-    const active=selVoice&&selVoice.name===v.name;
-    const d=document.createElement('div');
-    d.className='vitem'+(active?' sel':'');
-    d.innerHTML=`<div class="vdot"></div><span class="vname">${v.name}</span>${gBadge(gv)}<span class="vlang">${v.lang}</span>`;
-    d.onclick=()=>{document.querySelectorAll('.vitem').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');selVoice=v;setTxtStatus('Đã chọn: '+v.name,'');};
-    g.appendChild(d);
-    if(!selVoice&&i===0){selVoice=v;d.classList.add('sel');}
+function setP(t) { txEl.value = t; counter.textContent = t.length + ' / 500'; txEl.focus(); }
+function clearTts() { txEl.value = ''; counter.textContent = '0 / 500'; counter.className = 'counter'; setTxtStatus('Đã xóa', ''); }
+function copyTts() {
+  const t = txEl.value.trim(); if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    setTxtStatus('✓ Đã sao chép', 'ok');
+    setTimeout(() => setTxtStatus('Sẵn sàng', ''), 2000);
   });
 }
-function loadVoices(){
-  const all=speechSynthesis.getVoices();
-  allZh=all.filter(v=>v.lang.startsWith('zh')||v.lang.startsWith('cmn')||v.lang.startsWith('yue'));
-  applyFilter();
-  const online=allZh.filter(v=>!v.localService);
-  renderVoices(online,'vGridNet');
-  setTxtStatus(`${allZh.length} giọng tiếng Trung · Sẵn sàng`,'');
-}
-function applyFilter(){
-  let v=[...allZh];
-  if(gFilterVal!=='all') v=v.filter(x=>guessG(x.name)===(gFilterVal==='female'?'f':'m'));
-  if(!v.length) v=[...allZh];
-  renderVoices(v,'vGrid');
-}
-function gFilter(g,btn){
-  gFilterVal=g;
-  document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  applyFilter();
-}
-function switchVTab(t){
-  vtabVal=t;
-  document.getElementById('vt-sys').classList.toggle('active',t==='sys');
-  document.getElementById('vt-net').classList.toggle('active',t==='net');
-  document.getElementById('vp-sys').style.display=t==='sys'?'':'none';
-  document.getElementById('vp-net').style.display=t==='net'?'':'none';
-}
-if('speechSynthesis' in window){
-  if(speechSynthesis.getVoices().length) loadVoices();
-  speechSynthesis.onvoiceschanged=loadVoices;
-}
-function toggleSpeak(){
-  if(speaking){speechSynthesis.cancel();setSpeaking(false);setTxtStatus('Đã dừng','');return;}
-  const txt=txEl.value.trim();
-  if(!txt){setTxtStatus('⚠ Nhập văn bản trước','err');setTimeout(()=>setTxtStatus('Sẵn sàng',''),2000);return;}
-  const u=new SpeechSynthesisUtterance(txt);
-  if(selVoice) u.voice=selVoice; else u.lang='zh-CN';
-  u.rate=parseFloat(rS.value); u.pitch=parseFloat(pS.value); u.volume=parseFloat(vS.value);
-  u.onstart=()=>{setSpeaking(true);setTxtStatus('Đang đọc · '+(selVoice?selVoice.name:'Giọng mặc định'),'on');};
-  u.onend=()=>{setSpeaking(false);setTxtStatus('Hoàn thành · Sẵn sàng đọc lại','ok');};
-  u.onerror=e=>{setSpeaking(false);setTxtStatus('Lỗi: '+e.error,'err');};
-  speechSynthesis.speak(u);
-}
-function setSpeaking(on){
-  speaking=on;
-  speakBtn.classList.toggle('speaking',on);
-  spkLbl.textContent=on?'Dừng lại':'Đọc văn bản';
-  spkIco.innerHTML=on?'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>':'<path d="M8 5v14l11-7z"/>';
-}
-function setP(t){txEl.value=t;counter.textContent=t.length+' / 500';txEl.focus();}
-function clearTts(){if(speaking){speechSynthesis.cancel();setSpeaking(false);}txEl.value='';counter.textContent='0 / 500';counter.className='counter';setTxtStatus('Đã xóa','');}
-function copyTts(){const t=txEl.value.trim();if(!t)return;navigator.clipboard.writeText(t).then(()=>{setTxtStatus('✓ Đã sao chép','ok');setTimeout(()=>setTxtStatus('Sẵn sàng',''),2000);});}
-window.addEventListener('beforeunload',()=>{if(speaking)speechSynthesis.cancel();});
 
-// ══ VITS-WEB TTS EXPORT (Piper ONNX — offline, no HuggingFace auth needed) ══
-// Model files served from: huggingface.co/diffusionstudio/piper-voices (public, CORS-OK)
-// Dependencies resolved via importmap in <head>
-
+// ══ VITS / PIPER ENGINE ══
 const VITS_CDN = 'https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/dist/vits-web.js';
+let vModel = 'zh_CN-huayan-medium', vReady = false, vLoading = false, vitsMod = null;
+let previewAudio = null, previewing = false;
 
-let vModel='zh_CN-huayan-medium', vReady=false, vLoading=false, vitsMod=null;
+// Cache status per model: 'cached' | 'uncached' | 'unknown'
+const modelCache = {};
 
-function pickModel(id,el){
-  if(vLoading) return;
-  vModel=id;
-  document.querySelectorAll('.model-opt').forEach(e=>e.classList.remove('active'));
-  el.classList.add('active');
-  // only reset if engine isn't loaded for this model
-  const cached = vitsMod ? true : false;
-  if(!cached){ vReady=false; exportBtn.disabled=true; }
-  setVits('','Nhấn "Tải model" để chuẩn bị');
-  loadLbl.textContent='Tải model';
-}
-
-function setVits(type,msg){
-  vitsDot.className='sdot'+(type?' '+type:'');
-  vitsMsg.textContent=msg;
-}
-
-// Encode Float32Array → WAV Blob (pure JS, no lib needed)
-function encodeWAV(f32, sr){
-  const len=f32.length, buf=new ArrayBuffer(44+len*2), v=new DataView(buf);
-  const s=(o,str)=>{ for(let i=0;i<str.length;i++) v.setUint8(o+i,str.charCodeAt(i)); };
-  s(0,'RIFF'); v.setUint32(4,36+len*2,true); s(8,'WAVE'); s(12,'fmt ');
-  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
-  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
-  s(36,'data'); v.setUint32(40,len*2,true);
-  for(let i=0,o=44;i<len;i++,o+=2){
-    const x=Math.max(-1,Math.min(1,f32[i]));
-    v.setInt16(o,x<0?x*0x8000:x*0x7FFF,true);
-  }
-  return new Blob([buf],{type:'audio/wav'});
-}
-
-async function loadModel(){
-  if(vLoading) return;
-  vLoading=true; loadBtn.disabled=true;
-  dlWrap.style.display='flex'; dlFill.style.width='5%';
-  dlLbl.textContent='Đang tải thư viện Piper WASM...'; dlPct.textContent='';
-  setVits('','Đang tải thư viện...');
-  try{
-    vitsMod = await import(VITS_CDN);
-    dlFill.style.width='25%';
-
-    // Check cache first
-    const cached = await vitsMod.stored();
-    if(cached.includes(vModel)){
-      dlWrap.style.display='none';
-      vReady=true;
-      setVits('ok','✓ Model sẵn sàng · '+vModel+' · Đã cache');
-      exportBtn.disabled=false; loadLbl.textContent='Tải lại';
+function pickModel(id, el) {
+  if (vLoading) return;
+  // If switching to a different model, reset ready state
+  if (id !== vModel) {
+    vModel = id;
+    vReady = false;
+    previewBtn.disabled = true;
+    exportBtn.disabled = true;
+    stopPreview();
+    const stat = modelCache[id];
+    if (stat === 'cached') {
+      setVits('ok', '✓ Model đã cache · Nhấn "Tải model" để kích hoạt');
     } else {
-      dlLbl.textContent='Đang tải model Piper (~65 MB lần đầu)...';
-      setVits('','Đang tải model từ HuggingFace...');
-      await vitsMod.download(vModel, p=>{
-        if(p.total){
-          const pct=Math.round(25+(p.loaded/p.total)*72);
-          dlFill.style.width=pct+'%'; dlPct.textContent=pct+'%';
-          dlLbl.textContent='Đang tải... '+Math.round(p.loaded/1024/1024*10)/10+' / '+Math.round(p.total/1024/1024)+' MB';
+      setVits('', 'Nhấn "Tải model" để chuẩn bị');
+    }
+    loadLbl.textContent = 'Tải model';
+  }
+  document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function setVits(type, msg) {
+  vitsDot.className = 'sdot' + (type ? ' ' + type : '');
+  vitsMsg.textContent = msg;
+}
+
+// Check cache status for all models on load
+async function checkAllCached() {
+  try {
+    const tts = await import(VITS_CDN);
+    vitsMod = tts;
+    const cached = await tts.stored();
+    ['zh_CN-huayan-medium', 'zh_CN-huayan-x_low'].forEach((id, i) => {
+      modelCache[id] = cached.includes(id) ? 'cached' : 'uncached';
+      const el = document.getElementById('ms-' + i);
+      if (el) el.textContent = cached.includes(id) ? '✓ Đã cache' : '';
+    });
+    if (cached.includes(vModel)) {
+      vReady = true;
+      previewBtn.disabled = false;
+      exportBtn.disabled = false;
+      setVits('ok', '✓ Model sẵn sàng · ' + vModel);
+      loadLbl.textContent = 'Tải lại';
+    } else {
+      setVits('', 'Nhấn "Tải model" để chuẩn bị');
+    }
+  } catch (e) {
+    setVits('', 'Nhấn "Tải model" để chuẩn bị');
+  }
+}
+
+async function loadModel() {
+  if (vLoading) return;
+  vLoading = true;
+  loadBtn.disabled = true;
+  dlWrap.style.display = 'flex';
+  dlFill.style.width = '5%';
+  dlLbl.textContent = 'Đang tải thư viện Piper WASM...';
+  dlPct.textContent = '';
+  setVits('', 'Đang tải thư viện...');
+  try {
+    if (!vitsMod) vitsMod = await import(VITS_CDN);
+    const cached = await vitsMod.stored();
+    if (cached.includes(vModel)) {
+      dlWrap.style.display = 'none';
+      vReady = true;
+      setVits('ok', '✓ Model sẵn sàng · ' + vModel);
+      previewBtn.disabled = false;
+      exportBtn.disabled = false;
+      loadLbl.textContent = 'Tải lại';
+    } else {
+      setVits('', 'Đang tải model từ HuggingFace...');
+      dlLbl.textContent = 'Đang tải model Piper...';
+      await vitsMod.download(vModel, p => {
+        if (p.total) {
+          const pct = Math.round(25 + (p.loaded / p.total) * 72);
+          dlFill.style.width = pct + '%';
+          dlPct.textContent = pct + '%';
+          dlLbl.textContent = 'Đang tải... ' + Math.round(p.loaded / 1024 / 1024 * 10) / 10 + ' / ' + Math.round(p.total / 1024 / 1024) + ' MB';
         }
       });
-      dlWrap.style.display='none';
-      vReady=true;
-      setVits('ok','✓ Model sẵn sàng · '+vModel+' · Đã lưu vĩnh viễn');
-      exportBtn.disabled=false; loadLbl.textContent='Tải lại';
+      dlWrap.style.display = 'none';
+      vReady = true;
+      modelCache[vModel] = 'cached';
+      // Update cache badge
+      ['zh_CN-huayan-medium', 'zh_CN-huayan-x_low'].forEach((id, i) => {
+        const el = document.getElementById('ms-' + i);
+        if (el && id === vModel) el.textContent = '✓ Đã cache';
+      });
+      setVits('ok', '✓ Model sẵn sàng · ' + vModel + ' · Đã lưu vĩnh viễn');
+      previewBtn.disabled = false;
+      exportBtn.disabled = false;
+      loadLbl.textContent = 'Tải lại';
     }
-  }catch(err){
-    dlWrap.style.display='none';
-    setVits('err','Lỗi: '+err.message);
-    expRes.style.display='';
-    expRes.innerHTML=`<div class="err-box">✕ Lỗi tải model<br><span style="color:var(--muted);font-size:11px;">${err.message}</span></div>`;
+  } catch (err) {
+    dlWrap.style.display = 'none';
+    setVits('err', 'Lỗi: ' + err.message);
+    expRes.style.display = '';
+    expRes.innerHTML = `<div class="err-box">✕ Lỗi tải model<br><span style="color:var(--muted);font-size:11px;">${err.message}</span></div>`;
   }
-  vLoading=false; loadBtn.disabled=false;
+  vLoading = false;
+  loadBtn.disabled = false;
+}
+
+// Synthesize and return WAV blob (shared by preview + export)
+async function synthesize(txt) {
+  if (!vReady || !vitsMod) throw new Error('Model chưa sẵn sàng');
+  return await vitsMod.predict({ text: txt, voiceId: vModel });
+}
+
+// Preview — play directly in browser
+async function doPreview() {
+  if (previewing) { stopPreview(); return; }
+  const txt = txEl.value.trim();
+  if (!txt) { setTxtStatus('⚠ Nhập văn bản trước', 'err'); setTimeout(() => setTxtStatus('Sẵn sàng', ''), 2000); return; }
+  if (!vReady) { await loadModel(); return; }
+
+  previewBtn.disabled = true;
+  exportBtn.disabled = true;
+  synWrap.style.display = 'flex';
+  synLbl.textContent = 'Đang tổng hợp để nghe thử...';
+  setTxtStatus('Đang tổng hợp...', 'on');
+
+  try {
+    const wavBlob = await synthesize(txt);
+    synWrap.style.display = 'none';
+    const url = URL.createObjectURL(wavBlob);
+
+    previewAudio = new Audio(url);
+    previewing = true;
+    prvIco.setAttribute('viewBox', '0 0 24 24');
+    prvIco.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+    prvIco.setAttribute('fill', 'currentColor');
+    prvLbl.textContent = 'Dừng';
+    previewBtn.disabled = false;
+
+    setTxtStatus('Đang phát · ' + vModel, 'on');
+
+    previewAudio.onended = () => {
+      stopPreview();
+      URL.revokeObjectURL(url);
+      setTxtStatus('Hoàn thành · ' + vModel, 'ok');
+    };
+    previewAudio.onerror = () => { stopPreview(); URL.revokeObjectURL(url); };
+    previewAudio.play();
+
+  } catch (err) {
+    synWrap.style.display = 'none';
+    setTxtStatus('Lỗi: ' + err.message, 'err');
+    vReady = false; vitsMod = null;
+    previewBtn.disabled = true; exportBtn.disabled = true;
+    loadLbl.textContent = 'Tải model';
+    setVits('err', 'Lỗi — nhấn "Tải model" để thử lại');
+  }
+  exportBtn.disabled = false;
+}
+
+function stopPreview() {
+  if (previewAudio) { previewAudio.pause(); previewAudio.src = ''; previewAudio = null; }
+  previewing = false;
+  prvIco.setAttribute('viewBox', '0 0 24 24');
+  prvIco.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  prvLbl.textContent = 'Nghe thử';
+  previewBtn.disabled = !vReady;
+  setWave(false);
+}
+function setWave(on) {
+  document.querySelectorAll('.wv').forEach(d =>
+    on ? d.classList.add('on') : (d.classList.remove('on'), d.style.height = '3px')
+  );
 }
 
 async function doExport(){
-  const txt=txEl.value.trim();
-  if(!txt){setTxtStatus('⚠ Nhập văn bản trước','err');return;}
-  if(!vReady){await loadModel();return;}
-  exportBtn.disabled=true;
-  synWrap.style.display='flex'; synLbl.textContent='Đang tổng hợp giọng nói...';
-  expRes.style.display='none';
-  setTxtStatus('Đang tổng hợp WAV...','on');
-  try{
-    const wavBlob = await vitsMod.predict({text:txt, voiceId:vModel});
-    synWrap.style.display='none';
-    const url=URL.createObjectURL(wavBlob);
-    const fname='piper_'+Date.now()+'.wav';
-    const sizeKB=Math.round(wavBlob.size/1024);
+  const txt = txEl.value.trim();
+  if (!txt) { setTxtStatus('⚠ Nhập văn bản trước', 'err'); return; }
+  if (!vReady) { await loadModel(); return; }
 
-    // ── Save to history ──
+  stopPreview();
+  exportBtn.disabled = true;
+  previewBtn.disabled = true;
+  synWrap.style.display = 'flex';
+  synLbl.textContent = 'Đang tổng hợp để xuất file...';
+  expRes.style.display = 'none';
+  setTxtStatus('Đang tổng hợp WAV...', 'on');
+
+  try {
+    const wavBlob = await synthesize(txt);
+    synWrap.style.display = 'none';
+    const url = URL.createObjectURL(wavBlob);
+    const fname = 'piper_' + Date.now() + '.wav';
+    const sizeKB = Math.round(wavBlob.size / 1024);
+
     saveHistory({
-      id: Date.now(),
-      text: txt,
-      model: vModel,
-      fname: fname,
-      sizeKB: sizeKB,
-      ts: Date.now(),
-      blobData: await blobToBase64(wavBlob)   // store audio for replay
+      id: Date.now(), text: txt, model: vModel,
+      fname: fname, sizeKB: sizeKB, ts: Date.now(),
+      blobData: await blobToBase64(wavBlob)
     });
 
-    const a=document.createElement('a'); a.href=url; a.download=fname;
+    const a = document.createElement('a'); a.href = url; a.download = fname;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    expRes.style.display='';
-    expRes.innerHTML=`
+
+    expRes.style.display = '';
+    expRes.innerHTML = `
       <div class="result-box">
         <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--green);">✓ Đã tải xuống thành công</div>
-            <div style="font-size:11px;color:var(--muted);">${fname} · ${sizeKB} KB · WAV · Piper ONNX</div>
+            <div style="font-size:11px;color:var(--muted);">${fname} · ${sizeKB} KB · WAV · ${vModel}</div>
           </div>
         </div>
         <audio controls src="${url}" style="width:100%;height:32px;accent-color:var(--green);"></audio>
       </div>`;
-    setTimeout(()=>URL.revokeObjectURL(url),120000);
-    setTxtStatus('✓ WAV '+sizeKB+' KB · Piper ONNX','ok');
-  }catch(err){
-    synWrap.style.display='none';
-    expRes.style.display='';
-    expRes.innerHTML=`<div class="err-box">✕ Lỗi tổng hợp: ${err.message}</div>`;
-    setTxtStatus('Lỗi tổng hợp','err');
-    vReady=false; vitsMod=null; exportBtn.disabled=true;
-    loadLbl.textContent='Tải model';
-    setVits('err','Lỗi — nhấn "Tải model" để thử lại');
+    setTimeout(() => URL.revokeObjectURL(url), 120000);
+    setTxtStatus('✓ WAV ' + sizeKB + ' KB · ' + vModel, 'ok');
+  } catch (err) {
+    synWrap.style.display = 'none';
+    expRes.style.display = '';
+    expRes.innerHTML = `<div class="err-box">✕ Lỗi tổng hợp: ${err.message}</div>`;
+    setTxtStatus('Lỗi tổng hợp', 'err');
+    vReady = false; vitsMod = null;
+    previewBtn.disabled = true; exportBtn.disabled = true;
+    loadLbl.textContent = 'Tải model';
+    setVits('err', 'Lỗi — nhấn "Tải model" để thử lại');
   }
-  exportBtn.disabled=false;
+  exportBtn.disabled = false;
+  previewBtn.disabled = false;
 }
 
-// ── Convert Blob → base64 for localStorage storage ──
-function blobToBase64(blob){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=()=>res(r.result);
-    r.readAsDataURL(blob);
-  });
+function blobToBase64(blob) {
+  return new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(blob); });
 }
 
-setVits('','Nhấn "Tải model" để chuẩn bị · Tải 1 lần, dùng mãi');
+// Init
+setTimeout(checkAllCached, 600);
 
 // ══ HISTORY ══
 const HIST_KEY = 'zh_tts_history';
@@ -1167,11 +1174,10 @@ async function doOCR(){
     }});
     const txt=data.text.trim(), conf=Math.round(data.confidence);
     ocrProg.classList.remove('on');
-    ocrTxt.value=txt||'(Không nhận diện được)';
-    // Auto-expand to show full content without scrolling
-    ocrTxt.style.height='auto';
-    ocrTxt.style.height=ocrTxt.scrollHeight+'px';
-    ocrRes.style.display='';
+    ocrTxt.value = txt || '(Không nhận diện được)';
+    ocrRes.style.display = '';
+    // Must be visible before scrollHeight is accurate
+    requestAnimationFrame(() => autoResize(ocrTxt));
     const cc=conf>=70?'hi':conf>=40?'mid':'lo';
     const cl=conf>=70?'✓ Tin cậy cao':conf>=40?'⚡ Trung bình':'⚠ Thấp';
     const han=(txt.match(/[\u4e00-\u9fff]/g)||[]).length;
@@ -1191,7 +1197,7 @@ function sendToTts(){
   txEl.value=s; counter.textContent=s.length+' / 500';
   go('tts'); setTxtStatus('Đã nhận từ OCR · Nhấn Đọc để bắt đầu','');
 }
-function clearOcrRes(){ocrRes.style.display='none';ocrTxt.value='';ocrTxt.style.height='auto';confRow.innerHTML='';ocrProg.classList.remove('on');ocrFill.style.width='0%';ocrEmpty.style.display='';}
+function clearOcrRes(){ocrRes.style.display='none';ocrTxt.value='';ocrTxt.style.height='80px';confRow.innerHTML='';ocrProg.classList.remove('on');ocrFill.style.width='0%';ocrEmpty.style.display='';}
 
 // ══ VOICES GUIDE ══
 function detectOS(){
