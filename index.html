@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中文工具箱 · Công cụ tiếng Trung</title>
+<style>
+:root {
+  --bg: #0c0c12;
+  --sidebar-bg: #111118;
+  --surface: #16161f;
+  --surface2: #1d1d28;
+  --surface3: #232332;
+  --border: #272736;
+  --border2: #363650;
+  --text: #eeeeff;
+  --text-muted: #7878a0;
+  --text-dim: #44445a;
+  --accent: #7c6ff7;
+  --accent-hover: #9387ff;
+  --accent-glow: rgba(124,111,247,0.15);
+  --accent-light: #b0a6ff;
+  --red: #f06a6a;
+  --green: #52c97a;
+  --amber: #f5a623;
+  --teal: #3ec9c0;
+  --teal-glow: rgba(62,201,192,0.13);
+  --radius: 10px;
+  --radius-sm: 7px;
+  --sidebar-w: 220px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════ */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0 20px;
+  overflow: hidden;
+}
+
+.sidebar-logo {
+  padding: 0 20px 28px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.logo-zh {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 2px;
+  font-family: 'PingFang SC','Microsoft YaHei',serif;
+  line-height: 1;
+}
+.logo-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 5px;
+  letter-spacing: 1px;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 20px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.18s;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-left: 2px solid transparent;
+  margin: 1px 0;
+  user-select: none;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active {
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  border-left-color: var(--accent);
+}
+.nav-item .nav-icon {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px 20px 0;
+  border-top: 1px solid var(--border);
+}
+.footer-badge {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.footer-badge span {
+  display: inline-block;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════
+   MAIN AREA
+═══════════════════════════════════ */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* Topbar */
+.topbar {
+  height: 52px;
+  min-height: 52px;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  gap: 12px;
+}
+.topbar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.topbar-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.topbar-sep { color: var(--border2); margin: 0 4px; }
+
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.status-dot-sm {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border2);
+  transition: all 0.3s;
+}
+.status-dot-sm.on { background: var(--green); box-shadow: 0 0 6px var(--green); animation: blink 1s infinite; }
+.status-dot-sm.err { background: var(--red); }
+.status-dot-sm.ok { background: var(--green); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* Content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px 32px;
+}
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Pages */
+.page { display: none; animation: fadeIn 0.18s ease; }
+.page.visible { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════
+   LAYOUT GRIDS
+═══════════════════════════════════ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.col-span2 { grid-column: span 2; }
+
+/* OCR layout */
+.ocr-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ═══════════════════════════════════
+   CARDS
+═══════════════════════════════════ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.card + .card { margin-top: 16px; }
+
+.section-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ═══════════════════════════════════
+   FORM ELEMENTS
+═══════════════════════════════════ */
+textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 20px;
+  font-family: 'PingFang SC','Microsoft YaHei','Source Han Sans',sans-serif;
+  line-height: 1.9;
+  padding: 14px 16px;
+  resize: none;
+  min-height: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+  letter-spacing: 2px;
+}
+textarea.result-ta {
+  font-size: 18px;
+  min-height: 160px;
+  resize: vertical;
+}
+textarea::placeholder { color: var(--text-muted); opacity: 0.45; font-size: 16px; }
+textarea:focus { border-color: var(--accent); }
+textarea.teal-focus:focus { border-color: var(--teal); }
+
+.char-counter { font-size: 11px; color: var(--text-dim); text-align: right; margin-top: 5px; }
+.char-counter.limit { color: var(--red); }
+
+/* Sliders */
+.slider-row { display: flex; flex-direction: column; gap: 7px; }
+.slider-label { font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; }
+.slider-label span { color: var(--accent-light); font-weight: 600; }
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 3px;
+  background: var(--border2); border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  background: var(--accent); border-radius: 50%; cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.25); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+/* ═══════════════════════════════════
+   VOICE LIST
+═══════════════════════════════════ */
+.voice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 3px;
+}
+.voice-list::-webkit-scrollbar { width: 3px; }
+.voice-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.voice-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.voice-item:hover { background: var(--surface3); border-color: var(--border2); }
+.voice-item.active { border-color: var(--accent); background: var(--accent-glow); }
+.voice-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--border2);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.voice-item.active .voice-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.voice-item .v-name { font-size: 12.5px; font-weight: 500; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.voice-item .v-lang { font-size: 10px; color: var(--text-muted); background: var(--surface3); border-radius: 4px; padding: 1px 6px; }
+.voice-item.active .v-name { color: var(--accent-light); }
+.no-voices { color: var(--text-muted); font-size: 12px; padding: 12px; text-align: center; }
+
+/* ═══════════════════════════════════
+   QUICK PHRASES
+═══════════════════════════════════ */
+.phrase-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+  transition: all 0.18s;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); }
+.chip.lang-chip.active-lang { border-color: var(--teal) !important; color: var(--teal) !important; background: var(--teal-glow) !important; }
+
+/* ═══════════════════════════════════
+   BUTTONS
+═══════════════════════════════════ */
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px; font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: none;
+  white-space: nowrap;
+}
+.btn-accent { background: var(--accent); color: #fff; flex: 1; min-height: 44px; }
+.btn-accent:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.btn-accent:active { transform: scale(0.98); }
+.btn-accent.speaking { background: var(--red); animation: pulse-btn 1.2s infinite; }
+.btn-teal { background: var(--teal); color: #0a1f1e; flex: 1; min-height: 44px; }
+.btn-teal:hover { background: #55d9d0; transform: translateY(-1px); }
+.btn-teal:active { transform: scale(0.98); }
+.btn-teal:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  min-height: 44px; padding: 10px 16px;
+}
+.btn-ghost:hover { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+.btn-copy {
+  background: var(--teal);
+  color: #0a1f1e;
+  padding: 9px 18px;
+  font-size: 13px;
+}
+.btn-copy:hover { background: #55d9d0; }
+.btn-send {
+  background: var(--accent-glow);
+  color: var(--accent-light);
+  border: 1px solid rgba(124,111,247,0.35);
+  padding: 9px 18px;
+  font-size: 13px;
+}
+.btn-send:hover { background: rgba(124,111,247,0.25); border-color: var(--accent); }
+@keyframes pulse-btn { 0%,100%{opacity:1} 50%{opacity:0.7} }
+
+/* ═══════════════════════════════════
+   DROP ZONE
+═══════════════════════════════════ */
+.drop-zone {
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius);
+  padding: 36px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.22s;
+  position: relative;
+  background: var(--surface2);
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--teal);
+  background: rgba(62,201,192,0.05);
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.drop-icon { font-size: 32px; margin-bottom: 10px; line-height: 1; }
+.drop-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.drop-sub { font-size: 12px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════
+   IMAGE PREVIEW
+═══════════════════════════════════ */
+.img-preview-wrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: none;
+}
+.img-preview-wrap.visible { display: block; }
+.img-preview-wrap img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+}
+.img-clear-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.65);
+  border: none; border-radius: 50%;
+  width: 26px; height: 26px;
+  color: #fff; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.img-clear-btn:hover { background: rgba(240,106,106,0.8); }
+
+/* ═══════════════════════════════════
+   PROGRESS
+═══════════════════════════════════ */
+.progress-wrap {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: 14px;
+}
+.progress-wrap.visible { display: flex; }
+.progress-lbl { font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; }
+.progress-bg { background: var(--border2); border-radius: 3px; height: 5px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--teal); border-radius: 3px; width: 0%; transition: width 0.3s; }
+
+/* ═══════════════════════════════════
+   OCR RESULT
+═══════════════════════════════════ */
+.ocr-result-box { display: none; }
+.ocr-result-box.visible { display: block; }
+.conf-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.conf-chip {
+  font-size: 11px; padding: 3px 10px; border-radius: 6px;
+  display: flex; align-items: center; gap: 4px; font-weight: 500;
+}
+.conf-chip.high { background: rgba(82,201,122,0.1); color: var(--green); border: 1px solid rgba(82,201,122,0.25); }
+.conf-chip.mid  { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid rgba(245,166,35,0.25); }
+.conf-chip.low  { background: rgba(240,106,106,0.1); color: var(--red); border: 1px solid rgba(240,106,106,0.25); }
+.conf-chip.info { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(62,201,192,0.25); }
+
+/* ═══════════════════════════════════
+   WAVE
+═══════════════════════════════════ */
+.waveform { display: flex; align-items: center; gap: 3px; height: 20px; }
+.wv { width: 3px; background: var(--accent); border-radius: 2px; height: 3px; }
+.wv.on { animation: wv-anim 0.55s infinite ease-in-out alternate; }
+.wv:nth-child(1){animation-delay:0s} .wv:nth-child(2){animation-delay:.08s}
+.wv:nth-child(3){animation-delay:.16s} .wv:nth-child(4){animation-delay:.24s}
+.wv:nth-child(5){animation-delay:.12s} .wv:nth-child(6){animation-delay:.04s}
+.wv:nth-child(7){animation-delay:.2s}
+@keyframes wv-anim { from{height:3px} to{height:16px} }
+
+/* ═══════════════════════════════════
+   VOICES GUIDE PAGE
+═══════════════════════════════════ */
+.os-tab {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.os-tab:hover { color: var(--text); border-color: var(--border2); }
+.os-tab.active { background: var(--accent-glow); color: var(--accent-light); border-color: var(--accent); }
+
+.guide-steps { display: flex; flex-direction: column; gap: 0; }
+.guide-step {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.guide-step:last-child { border-bottom: none; }
+.step-num {
+  width: 26px; height: 26px;
+  min-width: 26px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(124,111,247,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: var(--accent-light);
+  margin-top: 1px;
+}
+.step-body { flex: 1; }
+.step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.step-desc strong { color: var(--text); font-weight: 600; }
+.step-desc code { background: var(--surface3); border-radius: 4px; padding: 1px 6px; font-family: monospace; font-size: 11px; color: var(--accent-light); }
+kbd {
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 11px;
+  color: var(--text);
+  font-family: monospace;
+}
+.voice-chips-preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.vc-chip {
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 2px 8px;
+}
+.code-block {
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--teal);
+  margin-top: 8px;
+  line-height: 1.8;
+}
+
+/* Voice check list */
+.vcheck-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.vcheck-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+.vcheck-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vcheck-lang { font-size: 10px; color: var(--text-muted); background: var(--surface3); border-radius: 4px; padding: 1px 6px; }
+
+/* Recommended voices */
+.rec-voice-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.rec-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 5px;
+  flex-shrink: 0; letter-spacing: 0.5px;
+}
+.rec-badge-win { background: rgba(0,120,212,0.15); color: #60a5fa; border: 1px solid rgba(0,120,212,0.25); }
+.rec-badge-mac { background: rgba(82,201,122,0.12); color: var(--green); border: 1px solid rgba(82,201,122,0.25); }
+.rec-badge-all { background: var(--accent-glow); color: var(--accent-light); border: 1px solid rgba(124,111,247,0.3); }
+.rec-info { flex: 1; min-width: 0; }
+.rec-name { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.rec-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.rec-stars { font-size: 12px; color: var(--amber); flex-shrink: 0; letter-spacing: 1px; }
+
+/* ═══════════════════════════════════
+   VOICE SOURCE TABS & GENDER FILTER
+═══════════════════════════════════ */
+.vsrc-tab {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-muted);
+  font-size: 12px; font-weight: 500; padding: 6px 13px;
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+}
+.vsrc-tab:hover { color: var(--text); border-color: var(--border2); }
+.vsrc-tab.active { background: var(--accent-glow); color: var(--accent-light); border-color: rgba(124,111,247,0.4); }
+
+.gender-tab {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 14px; color: var(--text-muted);
+  font-size: 11px; font-weight: 500; padding: 4px 12px;
+  cursor: pointer; transition: all 0.18s;
+}
+.gender-tab:hover { color: var(--text); border-color: var(--border2); }
+.gender-tab.active { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+
+/* ═══════════════════════════════════
+   FORMAT TABS & EXPORT BUTTON
+═══════════════════════════════════ */
+.fmt-tab {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-muted);
+  font-size: 12px; font-weight: 600; padding: 5px 14px;
+  cursor: pointer; transition: all 0.18s; letter-spacing: 0.5px;
+}
+.fmt-tab:hover { color: var(--text); border-color: var(--border2); }
+.fmt-tab.active { background: rgba(245,166,35,0.12); color: var(--amber); border-color: rgba(245,166,35,0.35); }
+
+.btn-export {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.35);
+  border-radius: var(--radius-sm); color: var(--amber);
+  font-size: 14px; font-weight: 600; padding: 12px 20px;
+  cursor: pointer; transition: all 0.2s; width: 100%;
+}
+.btn-export:hover { background: rgba(245,166,35,0.2); border-color: rgba(245,166,35,0.55); transform: translateY(-1px); }
+.btn-export:active { transform: scale(0.98); }
+.btn-export:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-export.recording { background: rgba(240,106,106,0.12); border-color: rgba(240,106,106,0.4); color: var(--red); animation: pulse-btn 1s infinite; }
+
+/* Export lang buttons */
+.export-lang-btn {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-muted);
+  font-size: 12px; font-weight: 500; padding: 5px 13px;
+  cursor: pointer; transition: all 0.18s;
+}
+.export-lang-btn:hover { color: var(--text); border-color: var(--border2); }
+.export-lang-btn.active { background: rgba(245,166,35,0.1); color: var(--amber); border-color: rgba(245,166,35,0.4); }
+
+/* VITS model option */
+.vits-model-opt {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  cursor: pointer; transition: all 0.18s;
+}
+.vits-model-opt:hover { background: var(--surface3); border-color: var(--border2); }
+.vits-model-opt.active { border-color: var(--accent); background: var(--accent-glow); }
+.vits-model-opt.active .voice-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+@keyframes indeterminate {
+  0%   { width: 0%;   margin-left: 0%; }
+  50%  { width: 60%;  margin-left: 20%; }
+  100% { width: 0%;   margin-left: 100%; }
+}
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-zh">中文工具箱</div>
+    <div class="logo-sub">Công cụ tiếng Trung</div>
+  </div>
+
+  <div class="nav-section-label">Tính năng</div>
+
+  <div class="nav-item active" id="nav-tts" onclick="switchTab('tts')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>
+    Văn bản → Giọng nói
+  </div>
+
+  <div class="nav-item" id="nav-ocr" onclick="switchTab('ocr')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <path d="M7 8h4M7 12h10M7 16h6"/>
+    </svg>
+    Ảnh → Văn bản (OCR)
+  </div>
+
+  <div class="nav-item" id="nav-voices" onclick="switchTab('voices')">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 8v4M12 16h.01"/>
+    </svg>
+    Thêm giọng nói
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="footer-badge">
+      Hoạt động offline<br>
+      <span>Web Speech API</span>
+      <span style="margin-left:4px;">Tesseract.js</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<div class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <span class="topbar-title" id="topbarTitle">Văn bản → Giọng nói</span>
+    <span class="topbar-sep">·</span>
+    <span class="topbar-sub" id="topbarSub">Nhập chữ Hán, chọn giọng và nhấn Đọc</span>
+    <div class="topbar-right">
+      <div class="status-pill" id="globalStatus">
+        <div class="status-dot-sm" id="globalDot"></div>
+        <span id="globalStatusText">Sẵn sàng</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- ════════ PAGE: TTS ════════ -->
+    <div class="page visible" id="pageTts">
+      <div class="two-col">
+
+        <!-- LEFT: Input + Controls -->
+        <div>
+          <div class="card">
+            <div class="section-title">Nhập văn bản</div>
+            <textarea id="inputText" placeholder="在这里输入中文文字...&#10;&#10;Ví dụ: 你好，欢迎使用！"></textarea>
+            <div class="char-counter" id="charCounter">0 / 500</div>
+            <div class="divider"></div>
+            <div class="section-title">Câu mẫu nhanh</div>
+            <div class="phrase-chips">
+              <div class="chip" onclick="setPhrase('你好，很高兴认识你！')">你好，很高兴认识你！</div>
+              <div class="chip" onclick="setPhrase('今天天气怎么样？')">今天天气怎么样？</div>
+              <div class="chip" onclick="setPhrase('我喜欢学习中文。')">我喜欢学习中文。</div>
+              <div class="chip" onclick="setPhrase('请问你在哪里？')">请问你在哪里？</div>
+              <div class="chip" onclick="setPhrase('谢谢你的帮助！')">谢谢你的帮助！</div>
+              <div class="chip" onclick="setPhrase('我想去中国旅行。')">我想去中国旅行。</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-title">Điều chỉnh giọng</div>
+            <div class="three-col">
+              <div class="slider-row">
+                <div class="slider-label">Tốc độ <span id="rateVal">1.0×</span></div>
+                <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1">
+              </div>
+              <div class="slider-row">
+                <div class="slider-label">Cao độ <span id="pitchVal">1.0</span></div>
+                <input type="range" id="pitchSlider" min="0" max="2" step="0.1" value="1">
+              </div>
+              <div class="slider-row">
+                <div class="slider-label">Âm lượng <span id="volVal">100%</span></div>
+                <input type="range" id="volSlider" min="0" max="1" step="0.05" value="1">
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-accent" id="speakBtn" onclick="toggleSpeak()">
+                <svg id="speakIcon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <span id="speakLabel">Đọc văn bản</span>
+              </button>
+              <button class="btn btn-ghost" onclick="clearText()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
+                Xóa
+              </button>
+              <button class="btn btn-ghost" onclick="copyTtsText()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Voice picker + Export -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- Voice card -->
+          <div class="card">
+            <div class="section-title">Chọn giọng đọc</div>
+
+            <!-- Voice source tabs -->
+            <div style="display:flex;gap:6px;margin-bottom:12px;">
+              <button class="vsrc-tab active" id="vtab-system" onclick="switchVoiceTab('system')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                Giọng hệ thống
+              </button>
+              <button class="vsrc-tab" id="vtab-online" onclick="switchVoiceTab('online')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Giọng Google (Online)
+              </button>
+            </div>
+
+            <!-- System voices panel -->
+            <div id="vpanel-system">
+              <!-- Gender filter -->
+              <div style="display:flex;gap:5px;margin-bottom:10px;">
+                <button class="gender-tab active" data-g="all" onclick="filterGender('all')">Tất cả</button>
+                <button class="gender-tab" data-g="female" onclick="filterGender('female')">
+                  <span style="color:#f9a8d4;">♀</span> Nữ
+                </button>
+                <button class="gender-tab" data-g="male" onclick="filterGender('male')">
+                  <span style="color:#93c5fd;">♂</span> Nam
+                </button>
+              </div>
+              <div class="voice-list" id="voiceGrid">
+                <div class="no-voices">Đang tải giọng đọc...</div>
+              </div>
+            </div>
+
+            <!-- Online voices panel -->
+            <div id="vpanel-online" style="display:none;">
+              <div style="background:rgba(62,201,192,0.08);border:1px solid rgba(62,201,192,0.2);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--teal);">
+                ✦ Giọng Google Neural — chất lượng cao nhất, cần internet, chỉ hoạt động trên Chrome/Edge
+              </div>
+              <div class="voice-list" id="voiceGridOnline">
+                <div class="no-voices">Đang tải giọng Google...</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+            <!-- Waveform status -->
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 13px;display:flex;align-items:center;gap:10px;">
+              <div class="waveform">
+                <div class="wv" id="w1"></div><div class="wv" id="w2"></div>
+                <div class="wv" id="w3"></div><div class="wv" id="w4"></div>
+                <div class="wv" id="w5"></div><div class="wv" id="w6"></div>
+                <div class="wv" id="w7"></div>
+              </div>
+              <span id="statusText" style="font-size:12px;color:var(--text-muted);flex:1;">Sẵn sàng</span>
+            </div>
+          </div>
+
+          <!-- Export card — VITS offline -->
+          <div class="card">
+            <div class="section-title">Xuất file WAV — Offline</div>
+            <div style="display:flex;flex-direction:column;gap:11px;">
+
+              <!-- Engine status -->
+              <div id="vitsStatusBar" style="display:flex;align-items:center;gap:9px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 13px;">
+                <div class="status-dot-sm" id="vitsDot"></div>
+                <span id="vitsStatusTxt" style="font-size:12px;color:var(--text-muted);flex:1;">Chưa tải model...</span>
+              </div>
+
+              <!-- Model selector -->
+              <div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Model giọng đọc</div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <div class="vits-model-opt active" id="vm-medium" onclick="selectVitsModel('zh_CN-huayan-medium',this)">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="voice-dot"></div>
+                      <div style="flex:1;">
+                        <div style="font-size:12.5px;font-weight:600;color:var(--text);">Huayan Medium</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Chất lượng tốt · ~65 MB · Tải 1 lần</div>
+                      </div>
+                      <span style="font-size:10px;background:rgba(82,201,122,0.1);color:var(--green);border:1px solid rgba(82,201,122,0.25);border-radius:4px;padding:2px 7px;">Khuyến nghị</span>
+                    </div>
+                  </div>
+                  <div class="vits-model-opt" id="vm-xlow" onclick="selectVitsModel('zh_CN-huayan-x_low',this)">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="voice-dot"></div>
+                      <div style="flex:1;">
+                        <div style="font-size:12.5px;font-weight:600;color:var(--text);">Huayan X-Low</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Nhẹ, nhanh · ~5 MB · Tải 1 lần</div>
+                      </div>
+                      <span style="font-size:10px;background:rgba(62,201,192,0.1);color:var(--teal);border:1px solid rgba(62,201,192,0.25);border-radius:4px;padding:2px 7px;">Nhanh</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Download progress (model) -->
+              <div id="vitsDownloadWrap" style="display:none;flex-direction:column;gap:6px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);">
+                  <span id="vitsDownloadLbl">Đang tải model...</span>
+                  <span id="vitsDownloadPct">0%</span>
+                </div>
+                <div style="background:var(--border2);border-radius:3px;height:5px;overflow:hidden;">
+                  <div id="vitsDownloadFill" style="height:100%;background:var(--accent);border-radius:3px;width:0%;transition:width 0.3s;"></div>
+                </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-export" id="vitsLoadBtn" onclick="loadVitsModel()" style="flex:none;padding:10px 16px;font-size:13px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span id="vitsLoadBtnLbl">Tải model</span>
+                </button>
+                <button class="btn btn-export" id="vitsExportBtn" onclick="vitsExport()" disabled style="flex:1;background:rgba(82,201,122,0.1);border-color:rgba(82,201,122,0.3);color:var(--green);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+                  <span id="vitsExportBtnLbl">Tổng hợp & Tải WAV</span>
+                </button>
+              </div>
+
+              <!-- Synthesis progress -->
+              <div id="vitsSynthWrap" style="display:none;flex-direction:column;gap:6px;">
+                <div style="font-size:11px;color:var(--text-muted);" id="vitsSynthLbl">Đang tổng hợp...</div>
+                <div style="background:var(--border2);border-radius:3px;height:5px;overflow:hidden;">
+                  <div id="vitsSynthFill" style="height:100%;background:var(--green);border-radius:3px;width:0%;animation:indeterminate 1.5s infinite;"></div>
+                </div>
+              </div>
+
+              <!-- Result -->
+              <div id="vitsResult" style="display:none;"></div>
+
+              <!-- Info -->
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.7;">
+                Chạy 100% trong trình duyệt · Không cần server · Không cần internet sau khi tải model · Model lưu vĩnh viễn trong máy
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /pageTts -->
+
+    <!-- ════════ PAGE: OCR ════════ -->
+    <div class="page" id="pageOcr">
+      <div class="ocr-layout">
+
+        <!-- LEFT: Upload + Settings -->
+        <div>
+          <div class="card">
+            <div class="section-title">Tải ảnh lên</div>
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="imgInput" accept="image/*" onchange="handleFileSelect(event)">
+              <div class="drop-icon">🖼️</div>
+              <div class="drop-title">Kéo thả hoặc click để chọn</div>
+              <div class="drop-sub">JPG · PNG · WebP · BMP — tối đa 10 MB</div>
+            </div>
+            <div class="img-preview-wrap" id="imgPreviewWrap">
+              <img id="imgPreview" src="" alt="">
+              <button class="img-clear-btn" onclick="clearImage()">✕</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-title">Ngôn ngữ nhận diện</div>
+            <div class="phrase-chips">
+              <div class="chip lang-chip active-lang" data-lang="chi_sim" onclick="selectLang(this)">简体中文</div>
+              <div class="chip lang-chip" data-lang="chi_tra" onclick="selectLang(this)">繁體中文</div>
+              <div class="chip lang-chip" data-lang="chi_sim+eng" onclick="selectLang(this)">中文 + English</div>
+              <div class="chip lang-chip" data-lang="chi_tra+eng" onclick="selectLang(this)">繁體 + English</div>
+            </div>
+
+            <div class="progress-wrap" id="ocrProgressWrap">
+              <div class="progress-lbl">
+                <span id="progressLabel">Đang xử lý...</span>
+                <span id="progressPct">0%</span>
+              </div>
+              <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-teal" id="ocrBtn" onclick="startOCR()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span id="ocrBtnLabel">Nhận diện văn bản</span>
+              </button>
+              <button class="btn btn-ghost" onclick="clearImage()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
+                Xóa ảnh
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Result -->
+        <div>
+          <div class="card">
+            <div class="section-title">Kết quả nhận diện</div>
+
+            <div class="ocr-result-box" id="ocrResultBox">
+              <div class="conf-row" id="confRow"></div>
+              <textarea class="result-ta teal-focus" id="ocrResultText" placeholder="Văn bản nhận diện sẽ xuất hiện ở đây..."></textarea>
+              <div class="btn-row" style="margin-top:12px;">
+                <button class="btn btn-copy" onclick="copyOcrResult()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5,15H4a2,2,0,0,1-2-2V4A2,2,0,0,1,4,2H15a2,2,0,0,1,2,2V5"/></svg>
+                  Sao chép toàn bộ
+                </button>
+                <button class="btn btn-send" onclick="sendToTts()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  Gửi sang TTS
+                </button>
+                <button class="btn btn-ghost" onclick="clearOcrResult()" style="padding:9px 14px;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19,6l-1,14H6L5,6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div id="ocrEmptyState" style="padding:48px 20px;text-align:center;">
+              <div style="font-size:36px;margin-bottom:12px;opacity:0.3;">扫</div>
+              <div style="font-size:13px;color:var(--text-muted);">Tải ảnh lên và nhấn<br>Nhận diện để xem kết quả</div>
+            </div>
+
+            <div class="divider"></div>
+            <!-- OCR status -->
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="status-dot-sm" id="ocrDot"></div>
+              <span id="ocrStatusText" style="font-size:12px;color:var(--text-muted);">Chọn ảnh để bắt đầu</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /pageOcr -->
+
+    <!-- ════════ PAGE: VOICES GUIDE ════════ -->
+    <div class="page" id="pageVoices">
+
+      <!-- OS detector banner -->
+      <div id="osBanner" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
+        <div id="osIcon" style="font-size:28px;line-height:1;">💻</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text)" id="osDetectedLabel">Đang phát hiện hệ điều hành...</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:2px;" id="osDetectedSub">Hướng dẫn bên dưới sẽ được tô sáng phù hợp với máy bạn</div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:8px;" id="osTabBtns">
+          <button class="os-tab active" data-os="windows" onclick="selectOS('windows')">Windows</button>
+          <button class="os-tab" data-os="mac" onclick="selectOS('mac')">macOS</button>
+          <button class="os-tab" data-os="linux" onclick="selectOS('linux')">Linux / Android</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+
+        <!-- LEFT: Step-by-step guide -->
+        <div>
+          <!-- Windows -->
+          <div class="os-panel" id="panel-windows">
+            <div class="card">
+              <div class="section-title">Windows — Cài giọng tiếng Trung</div>
+              <div class="guide-steps">
+                <div class="guide-step">
+                  <div class="step-num">1</div>
+                  <div class="step-body">
+                    <div class="step-title">Mở Settings</div>
+                    <div class="step-desc">Nhấn <kbd>Win</kbd> + <kbd>I</kbd> để mở Windows Settings</div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">2</div>
+                  <div class="step-body">
+                    <div class="step-title">Vào Time &amp; Language → Speech</div>
+                    <div class="step-desc">Trong menu trái chọn <strong>Time &amp; language</strong>, sau đó nhấn <strong>Speech</strong></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">3</div>
+                  <div class="step-body">
+                    <div class="step-title">Thêm giọng nói</div>
+                    <div class="step-desc">Cuộn xuống phần <strong>"Manage voices"</strong>, nhấn <strong>"Add voices"</strong></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">4</div>
+                  <div class="step-body">
+                    <div class="step-title">Tìm và cài Chinese</div>
+                    <div class="step-desc">Gõ <code>Chinese</code> vào ô tìm kiếm → chọn các giọng muốn cài → nhấn <strong>Add</strong></div>
+                    <div class="voice-chips-preview">
+                      <span class="vc-chip">Microsoft Xiaoxiao (Nữ · Phổ thông)</span>
+                      <span class="vc-chip">Microsoft Yunyang (Nam · Phổ thông)</span>
+                      <span class="vc-chip">Microsoft HiuMaan (Nữ · Quảng Đông)</span>
+                      <span class="vc-chip">Microsoft HiuGaai (Nữ · Quảng Đông)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">5</div>
+                  <div class="step-body">
+                    <div class="step-title">Khởi động lại trình duyệt</div>
+                    <div class="step-desc">Đóng hoàn toàn Chrome/Edge rồi mở lại — giọng mới sẽ xuất hiện trong danh sách</div>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-row" style="margin-top:16px;">
+                <button class="btn btn-ghost" style="font-size:12px;padding:9px 16px;" onclick="openLink('ms-settings:speech')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Mở Settings Speech (Windows)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- macOS -->
+          <div class="os-panel" id="panel-mac" style="display:none;">
+            <div class="card">
+              <div class="section-title">macOS — Cài giọng tiếng Trung</div>
+              <div class="guide-steps">
+                <div class="guide-step">
+                  <div class="step-num">1</div>
+                  <div class="step-body">
+                    <div class="step-title">Mở System Settings</div>
+                    <div class="step-desc">Nhấn menu Apple () → <strong>System Settings</strong></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">2</div>
+                  <div class="step-body">
+                    <div class="step-title">Vào Accessibility → Spoken Content</div>
+                    <div class="step-desc">Tìm <strong>Accessibility</strong> trong danh sách bên trái → chọn <strong>Spoken Content</strong></div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">3</div>
+                  <div class="step-body">
+                    <div class="step-title">Nhấn System Voice → Customize</div>
+                    <div class="step-desc">Click vào dropdown <strong>System Voice</strong> → chọn <strong>Customize...</strong> ở cuối danh sách</div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">4</div>
+                  <div class="step-body">
+                    <div class="step-title">Tìm Chinese và tải về</div>
+                    <div class="step-desc">Tìm <code>Chinese</code> → tích vào các giọng muốn cài → nhấn OK để tải về</div>
+                    <div class="voice-chips-preview">
+                      <span class="vc-chip">Tingting (Nữ · Phổ thông)</span>
+                      <span class="vc-chip">Sinji (Nữ · Quảng Đông)</span>
+                      <span class="vc-chip">Meijia (Nữ · Đài Loan)</span>
+                      <span class="vc-chip">Lekiu (Nam · Phổ thông)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">5</div>
+                  <div class="step-body">
+                    <div class="step-title">Khởi động lại Safari / Chrome</div>
+                    <div class="step-desc">Đóng và mở lại trình duyệt. Safari nhận giọng ngay; Chrome cần vài giây để reload.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linux/Android -->
+          <div class="os-panel" id="panel-linux" style="display:none;">
+            <div class="card">
+              <div class="section-title">Linux / Android / ChromeOS</div>
+              <div class="guide-steps">
+                <div class="guide-step">
+                  <div class="step-num">1</div>
+                  <div class="step-body">
+                    <div class="step-title">Dùng Chrome trên Android</div>
+                    <div class="step-desc">Android có sẵn <strong>Google Text-to-Speech</strong> hỗ trợ tiếng Trung. Mở ứng dụng trực tiếp trên Chrome di động.</div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">2</div>
+                  <div class="step-body">
+                    <div class="step-title">Linux — Cài espeak-ng hoặc festival</div>
+                    <div class="step-desc">Cài engine TTS hỗ trợ tiếng Trung:</div>
+                    <div class="code-block">sudo apt install espeak-ng<br>sudo apt install speech-dispatcher</div>
+                  </div>
+                </div>
+                <div class="guide-step">
+                  <div class="step-num">3</div>
+                  <div class="step-body">
+                    <div class="step-title">Hoặc dùng Chrome + Google TTS</div>
+                    <div class="step-desc">Chrome trên Linux đôi khi tích hợp giọng Google — thử reload trang này trong Chrome và kiểm tra danh sách bên phải.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Live check + voice count -->
+        <div>
+          <div class="card">
+            <div class="section-title">Kiểm tra giọng hiện có</div>
+
+            <div id="voiceCheckResult">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                <div id="zhVoiceCount" style="font-size:36px;font-weight:700;color:var(--accent-light);line-height:1;">—</div>
+                <div>
+                  <div style="font-size:13px;color:var(--text);">giọng tiếng Trung</div>
+                  <div style="font-size:11px;color:var(--text-muted);" id="totalVoiceCount">đang tải...</div>
+                </div>
+              </div>
+
+              <div id="voiceCheckList" style="display:flex;flex-direction:column;gap:5px;max-height:280px;overflow-y:auto;padding-right:3px;">
+                <div style="font-size:12px;color:var(--text-muted);padding:8px 0;">Đang quét giọng...</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <button class="btn btn-ghost" style="width:100%;font-size:12px;" onclick="rescanVoices()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Quét lại giọng (sau khi cài xong)
+            </button>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-title">Giọng được đề xuất</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="rec-voice-row">
+                <div class="rec-badge rec-badge-win">Win</div>
+                <div class="rec-info">
+                  <div class="rec-name">Microsoft Xiaoxiao</div>
+                  <div class="rec-desc">Nữ · Neural · Phổ thông · Rất tự nhiên</div>
+                </div>
+                <div class="rec-stars">★★★★★</div>
+              </div>
+              <div class="rec-voice-row">
+                <div class="rec-badge rec-badge-win">Win</div>
+                <div class="rec-info">
+                  <div class="rec-name">Microsoft Yunyang</div>
+                  <div class="rec-desc">Nam · Neural · Phổ thông · Rõ ràng</div>
+                </div>
+                <div class="rec-stars">★★★★☆</div>
+              </div>
+              <div class="rec-voice-row">
+                <div class="rec-badge rec-badge-mac">Mac</div>
+                <div class="rec-info">
+                  <div class="rec-name">Tingting</div>
+                  <div class="rec-desc">Nữ · Phổ thông · Chuẩn mực</div>
+                </div>
+                <div class="rec-stars">★★★★☆</div>
+              </div>
+              <div class="rec-voice-row">
+                <div class="rec-badge rec-badge-mac">Mac</div>
+                <div class="rec-info">
+                  <div class="rec-name">Sinji</div>
+                  <div class="rec-desc">Nữ · Quảng Đông (HK) · Tự nhiên</div>
+                </div>
+                <div class="rec-stars">★★★★☆</div>
+              </div>
+              <div class="rec-voice-row">
+                <div class="rec-badge rec-badge-all">All</div>
+                <div class="rec-info">
+                  <div class="rec-name">Google 普通话 (网络)</div>
+                  <div class="rec-desc">Chrome · Cần kết nối internet · Chất lượng cao</div>
+                </div>
+                <div class="rec-stars">★★★★★</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pageVoices -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+// ══════════════════════════════
+// NAVIGATION
+// ══════════════════════════════
+function switchTab(tab) {
+  ['tts','ocr','voices'].forEach(t => {
+    document.getElementById('page' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('visible', t === tab);
+    document.getElementById('nav-' + t).classList.toggle('active', t === tab);
+  });
+
+  const titles = {
+    tts:    ['Văn bản → Giọng nói',   'Nhập chữ Hán, chọn giọng và nhấn Đọc'],
+    ocr:    ['Ảnh → Văn bản (OCR)',    'Tải ảnh có chứa chữ Hán, nhận diện và sao chép'],
+    voices: ['Thêm giọng nói',         'Hướng dẫn cài thêm giọng tiếng Trung miễn phí']
+  };
+  document.getElementById('topbarTitle').textContent = titles[tab][0];
+  document.getElementById('topbarSub').textContent   = titles[tab][1];
+
+  if (tab === 'voices') initVoicesPage();
+}
+
+// ══════════════════════════════
+// TTS — ENHANCED
+// ══════════════════════════════
+let selectedVoice = null, isSpeaking = false;
+let currentGenderFilter = 'all';
+let currentVoiceTab = 'system';
+let currentExportFmt = 'wav';
+let allZhVoices = [];
+
+const textarea = document.getElementById('inputText');
+const charCounter = document.getElementById('charCounter');
+const speakBtn   = document.getElementById('speakBtn');
+const speakLabel = document.getElementById('speakLabel');
+const speakIcon  = document.getElementById('speakIcon');
+const statusText = document.getElementById('statusText');
+const waveDivs   = document.querySelectorAll('.wv');
+const globalDot  = document.getElementById('globalDot');
+const globalStatusText = document.getElementById('globalStatusText');
+
+textarea.addEventListener('input', () => {
+  const l = textarea.value.length;
+  charCounter.textContent = l + ' / 500';
+  charCounter.className = 'char-counter' + (l > 450 ? ' limit' : '');
+});
+
+['rateSlider','pitchSlider','volSlider'].forEach(id => {
+  const el = document.getElementById(id);
+  const out = document.getElementById(id === 'rateSlider' ? 'rateVal' : id === 'pitchSlider' ? 'pitchVal' : 'volVal');
+  el.addEventListener('input', () => {
+    if (id === 'volSlider') out.textContent = Math.round(parseFloat(el.value)*100) + '%';
+    else out.textContent = parseFloat(el.value).toFixed(1) + (id === 'rateSlider' ? '×' : '');
+  });
+});
+
+function setWave(on) {
+  waveDivs.forEach(d => on ? d.classList.add('on') : (d.classList.remove('on'), d.style.height = '3px'));
+}
+function setTtsStatus(msg, type) {
+  statusText.textContent = msg;
+  globalStatusText.textContent = msg;
+  globalDot.className = 'status-dot-sm' + (type ? ' ' + type : '');
+  setWave(type === 'on');
+}
+
+// ── Guess gender from voice name ──
+function guessGender(name) {
+  const n = name.toLowerCase();
+  const femaleKw = ['xiao','xia','ting','mei','yan','lin','hui','jing','fang','yun','zhi','li','na','juan','ping','lei','nü','female','woman','girl','sinji','hiugaai','hiumaan','tingting','meijia','lisha','xiaomo','xiaochen','xiaoxuan','xiaorui','xiaoshu','ruoxi','yunxi','yunyue','xiaoyi','xiaoni'];
+  const maleKw   = ['gang','ming','wei','long','qiang','dong','jun','peng','yang','bo','liang','hao','yu','male','man','boy','yunyang','yunfeng','yunhao','yunjian','yunxi male','yunze','wanlong','kangkang'];
+  if (femaleKw.some(k => n.includes(k))) return 'female';
+  if (maleKw.some(k => n.includes(k)))   return 'male';
+  return 'unknown';
+}
+
+// ── Voice gender badge ──
+function genderBadge(gender) {
+  if (gender === 'female') return '<span style="font-size:10px;background:rgba(249,168,212,0.12);color:#f9a8d4;border:1px solid rgba(249,168,212,0.25);border-radius:4px;padding:1px 5px;">♀ Nữ</span>';
+  if (gender === 'male')   return '<span style="font-size:10px;background:rgba(147,197,253,0.12);color:#93c5fd;border:1px solid rgba(147,197,253,0.25);border-radius:4px;padding:1px 5px;">♂ Nam</span>';
+  return '';
+}
+
+// ── Render voice list ──
+function renderVoiceList(voices, containerId, allowSelect = true) {
+  const grid = document.getElementById(containerId);
+  if (!voices.length) {
+    grid.innerHTML = '<div class="no-voices">Không tìm thấy giọng nào.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  voices.forEach((v, i) => {
+    const gender = guessGender(v.name);
+    const isActive = selectedVoice && selectedVoice.name === v.name;
+    const d = document.createElement('div');
+    d.className = 'voice-item' + (isActive ? ' active' : '');
+    d.innerHTML = `
+      <div class="voice-dot"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="v-name">${v.name}</span>
+          ${genderBadge(gender)}
+        </div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:1px;">${v.lang}</div>
+      </div>`;
+    if (allowSelect) {
+      d.onclick = () => {
+        document.querySelectorAll('.voice-item').forEach(x => x.classList.remove('active'));
+        d.classList.add('active');
+        selectedVoice = v;
+        setTtsStatus(`Đã chọn: ${v.name}`, '');
+      };
+    }
+    grid.appendChild(d);
+    if (!selectedVoice && i === 0) { selectedVoice = v; d.classList.add('active'); }
+  });
+}
+
+function loadVoices() {
+  const all = window.speechSynthesis.getVoices();
+  allZhVoices = all.filter(v => v.lang.startsWith('zh') || v.lang.startsWith('cmn') || v.lang.startsWith('yue'));
+
+  applyGenderFilter();
+
+  // Online (Google Network) voices
+  const online = allZhVoices.filter(v => !v.localService);
+  const offline = allZhVoices.filter(v => v.localService);
+
+  const onlineGrid = document.getElementById('voiceGridOnline');
+  if (!online.length) {
+    onlineGrid.innerHTML = '<div class="no-voices" style="text-align:left;padding:12px 0;line-height:1.8;">Không tìm thấy giọng Google Network.<br><span style="font-size:11px;opacity:0.7;">Cần dùng Chrome + kết nối internet + hệ thống đã có giọng zh cài sẵn.</span></div>';
+  } else {
+    renderVoiceList(online, 'voiceGridOnline');
+  }
+
+  const total = allZhVoices.length;
+  setTtsStatus(`${total} giọng tiếng Trung · Sẵn sàng`, '');
+}
+
+function applyGenderFilter() {
+  let voices = [...allZhVoices].filter(v => v.localService || currentVoiceTab === 'system');
+  if (currentVoiceTab === 'system') {
+    voices = allZhVoices.filter(v => v.localService !== false || allZhVoices.every(x => x.localService === undefined));
+  }
+  if (currentGenderFilter !== 'all') {
+    voices = voices.filter(v => guessGender(v.name) === currentGenderFilter);
+    if (!voices.length) voices = allZhVoices; // fallback
+  }
+  renderVoiceList(voices, 'voiceGrid');
+}
+
+function filterGender(g) {
+  currentGenderFilter = g;
+  document.querySelectorAll('.gender-tab').forEach(b => b.classList.toggle('active', b.dataset.g === g));
+  applyGenderFilter();
+}
+
+function switchVoiceTab(tab) {
+  currentVoiceTab = tab;
+  document.getElementById('vtab-system').classList.toggle('active', tab === 'system');
+  document.getElementById('vtab-online').classList.toggle('active', tab === 'online');
+  document.getElementById('vpanel-system').style.display = tab === 'system' ? '' : 'none';
+  document.getElementById('vpanel-online').style.display = tab === 'online' ? '' : 'none';
+}
+
+function selectFmt(fmt) {
+  currentExportFmt = fmt;
+  document.querySelectorAll('.fmt-tab').forEach(b => b.classList.toggle('active', b.dataset.fmt === fmt));
+  document.getElementById('fmtNote').textContent = fmt === 'wav' ? 'Không nén · Chất lượng gốc' : 'Nén nhẹ · File nhỏ hơn · Tương thích rộng';
+}
+
+if ('speechSynthesis' in window) {
+  if (speechSynthesis.getVoices().length) loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+} else {
+  document.getElementById('voiceGrid').innerHTML = '<div class="no-voices">Trình duyệt không hỗ trợ TTS.</div>';
+  speakBtn.disabled = true;
+}
+
+function toggleSpeak() {
+  if (isSpeaking) {
+    speechSynthesis.cancel(); setSpeakingState(false);
+    setTtsStatus('Đã dừng · Sẵn sàng', ''); return;
+  }
+  const text = textarea.value.trim();
+  if (!text) {
+    setTtsStatus('⚠ Vui lòng nhập văn bản', 'err');
+    setTimeout(() => setTtsStatus('Sẵn sàng', ''), 2000); return;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  if (selectedVoice) u.voice = selectedVoice; else u.lang = 'zh-CN';
+  u.rate   = parseFloat(document.getElementById('rateSlider').value);
+  u.pitch  = parseFloat(document.getElementById('pitchSlider').value);
+  u.volume = parseFloat(document.getElementById('volSlider').value);
+  u.onstart = () => { setSpeakingState(true); setTtsStatus('Đang đọc · ' + (selectedVoice ? selectedVoice.name : 'Giọng mặc định'), 'on'); };
+  u.onend   = () => { setSpeakingState(false); setTtsStatus('Hoàn thành · Sẵn sàng đọc lại', 'ok'); };
+  u.onerror = e  => { setSpeakingState(false); setTtsStatus('Lỗi: ' + e.error, 'err'); };
+  speechSynthesis.speak(u);
+}
+
+function setSpeakingState(on) {
+  isSpeaking = on;
+  if (on) {
+    speakBtn.classList.add('speaking'); speakLabel.textContent = 'Dừng lại';
+    speakIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  } else {
+    speakBtn.classList.remove('speaking'); speakLabel.textContent = 'Đọc văn bản';
+    speakIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  }
+}
+
+// ══════════════════════════════
+// VITS-WEB OFFLINE TTS EXPORT
+// ══════════════════════════════
+let vitsModel = 'zh_CN-huayan-medium';
+let vitsReady = false;
+let vitsLoading = false;
+
+function selectVitsModel(id, el) {
+  vitsModel = id;
+  document.querySelectorAll('.vits-model-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  // Reset state if different model selected
+  vitsReady = false;
+  document.getElementById('vitsExportBtn').disabled = true;
+  setVitsStatus('', 'Nhấn "Tải model" để chuẩn bị giọng đọc');
+  document.getElementById('vitsLoadBtnLbl').textContent = 'Tải model';
+  document.getElementById('vitsLoadBtn').disabled = false;
+}
+
+function setVitsStatus(type, msg) {
+  const dot = document.getElementById('vitsDot');
+  const txt = document.getElementById('vitsStatusTxt');
+  dot.className = 'status-dot-sm' + (type ? ' ' + type : '');
+  txt.textContent = msg;
+}
+
+// Check if model already cached in OPFS
+async function checkVitsCached() {
+  try {
+    // vits-web stores models in OPFS; we call stored() to check
+    const { stored } = await import('https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/dist/vits-web.js');
+    const cached = await stored();
+    if (cached.includes(vitsModel)) {
+      vitsReady = true;
+      setVitsStatus('ok', `Model sẵn sàng · ${vitsModel} · Đã cache`);
+      document.getElementById('vitsExportBtn').disabled = false;
+      document.getElementById('vitsLoadBtnLbl').textContent = 'Tải lại';
+      return true;
+    }
+  } catch(e) { /* ignore */ }
+  setVitsStatus('', 'Nhấn "Tải model" để chuẩn bị giọng đọc');
+  return false;
+}
+
+async function loadVitsModel() {
+  if (vitsLoading) return;
+  vitsLoading = true;
+
+  const loadBtn  = document.getElementById('vitsLoadBtn');
+  const dlWrap   = document.getElementById('vitsDownloadWrap');
+  const dlLbl    = document.getElementById('vitsDownloadLbl');
+  const dlPct    = document.getElementById('vitsDownloadPct');
+  const dlFill   = document.getElementById('vitsDownloadFill');
+
+  loadBtn.disabled = true;
+  dlWrap.style.display = 'flex';
+  dlFill.style.width = '0%';
+  setVitsStatus('', 'Đang tải thư viện...');
+
+  try {
+    const tts = await import('https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/dist/vits-web.js');
+
+    // Check if already cached
+    const cached = await tts.stored();
+    if (cached.includes(vitsModel)) {
+      vitsReady = true;
+      dlWrap.style.display = 'none';
+      setVitsStatus('ok', `Model sẵn sàng · ${vitsModel}`);
+      document.getElementById('vitsExportBtn').disabled = false;
+      document.getElementById('vitsLoadBtnLbl').textContent = 'Tải lại';
+      vitsLoading = false;
+      loadBtn.disabled = false;
+      return;
+    }
+
+    setVitsStatus('', `Đang tải model ${vitsModel}...`);
+    dlLbl.textContent = 'Đang tải model từ HuggingFace...';
+
+    await tts.download(vitsModel, (p) => {
+      const pct = Math.round((p.loaded / p.total) * 100);
+      dlFill.style.width = pct + '%';
+      dlPct.textContent  = pct + '%';
+      const mb = Math.round(p.loaded / 1024 / 1024 * 10) / 10;
+      dlLbl.textContent  = `Đang tải... ${mb} MB`;
+    });
+
+    vitsReady = true;
+    dlWrap.style.display = 'none';
+    setVitsStatus('ok', `✓ Model sẵn sàng · ${vitsModel} · Đã lưu vĩnh viễn`);
+    document.getElementById('vitsExportBtn').disabled = false;
+    document.getElementById('vitsLoadBtnLbl').textContent = 'Tải lại';
+
+  } catch(err) {
+    dlWrap.style.display = 'none';
+    setVitsStatus('err', 'Lỗi tải model: ' + err.message);
+    document.getElementById('vitsResult').style.display = '';
+    document.getElementById('vitsResult').innerHTML = `
+      <div style="background:rgba(240,106,106,0.08);border:1px solid rgba(240,106,106,0.2);border-radius:var(--radius-sm);padding:10px 13px;font-size:12px;color:var(--text-muted);line-height:1.7;">
+        <div style="color:var(--red);font-weight:600;margin-bottom:4px;">✕ Không tải được model</div>
+        ${err.message}<br>
+        Cần kết nối internet để tải lần đầu. Sau đó dùng offline hoàn toàn.
+      </div>`;
+  }
+
+  vitsLoading = false;
+  loadBtn.disabled = false;
+}
+
+async function vitsExport() {
+  const text = textarea.value.trim();
+  if (!text) { setTtsStatus('⚠ Nhập văn bản trước khi xuất', 'err'); return; }
+  if (!vitsReady) { await loadVitsModel(); return; }
+
+  const exportBtn = document.getElementById('vitsExportBtn');
+  const synthWrap = document.getElementById('vitsSynthWrap');
+  const synthLbl  = document.getElementById('vitsSynthLbl');
+  const resultEl  = document.getElementById('vitsResult');
+
+  exportBtn.disabled = true;
+  synthWrap.style.display = 'flex';
+  resultEl.style.display  = 'none';
+  synthLbl.textContent    = 'Đang tổng hợp giọng nói...';
+  setTtsStatus('Đang tổng hợp WAV...', 'on');
+
+  try {
+    const tts = await import('https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/dist/vits-web.js');
+    const wav  = await tts.predict({ text, voiceId: vitsModel });
+
+    synthWrap.style.display = 'none';
+
+    const url   = URL.createObjectURL(wav);
+    const fname = `huayan_${Date.now()}.wav`;
+    const sizeKB = Math.round(wav.size / 1024);
+
+    // Trigger download
+    const a = document.createElement('a');
+    a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+
+    // Show result with play button
+    resultEl.style.display = '';
+    resultEl.innerHTML = `
+      <div style="background:rgba(82,201,122,0.08);border:1px solid rgba(82,201,122,0.25);border-radius:var(--radius-sm);padding:10px 13px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--green);">✓ Đã tải xuống thành công</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:1px;">${fname} · ${sizeKB} KB · WAV · ${vitsModel}</div>
+          </div>
+        </div>
+        <audio controls src="${url}" style="width:100%;height:32px;accent-color:var(--green);"></audio>
+      </div>`;
+
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    setTtsStatus(`✓ WAV ${sizeKB} KB · ${vitsModel}`, 'ok');
+
+  } catch(err) {
+    synthWrap.style.display = 'none';
+    resultEl.style.display  = '';
+    resultEl.innerHTML = `
+      <div style="background:rgba(240,106,106,0.08);border:1px solid rgba(240,106,106,0.2);border-radius:var(--radius-sm);padding:10px 13px;font-size:12px;color:var(--red);">
+        ✕ Lỗi tổng hợp: ${err.message}
+      </div>`;
+    setTtsStatus('Lỗi tổng hợp', 'err');
+    // If model got corrupted, reset
+    vitsReady = false;
+    document.getElementById('vitsExportBtn').disabled = true;
+  }
+
+  exportBtn.disabled = false;
+}
+
+// ── Compat stubs for old references ──
+function selectExportLang() {}
+function selectFmt() {}
+function downloadMP3() { vitsExport(); }
+function checkServer() {}
+
+// On load: check if model already cached
+setTimeout(() => {
+  setVitsStatus('', 'Đang kiểm tra cache...');
+  checkVitsCached();
+}, 600);
+
+function setPhrase(t) { textarea.value = t; charCounter.textContent = t.length + ' / 500'; textarea.focus(); }
+function clearText() {
+  if (isSpeaking) { speechSynthesis.cancel(); setSpeakingState(false); }
+  textarea.value = ''; charCounter.textContent = '0 / 500';
+  charCounter.className = 'char-counter'; setTtsStatus('Đã xóa', '');
+}
+function copyTtsText() {
+  const t = textarea.value.trim(); if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    setTtsStatus('✓ Đã sao chép', 'ok');
+    setTimeout(() => setTtsStatus('Sẵn sàng', ''), 2000);
+  });
+}
+window.addEventListener('beforeunload', () => { if (isSpeaking) speechSynthesis.cancel(); });
+
+// ══════════════════════════════
+// OCR
+// ══════════════════════════════
+let currentFile = null, currentLang = 'chi_sim', ocrRunning = false;
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadImageFile(f);
+});
+function handleFileSelect(e) { const f = e.target.files[0]; if (f) loadImageFile(f); }
+
+function loadImageFile(file) {
+  if (file.size > 10*1024*1024) { setOcrStatus('⚠ File quá lớn (max 10 MB)', 'err'); return; }
+  currentFile = file;
+  document.getElementById('imgPreview').src = URL.createObjectURL(file);
+  document.getElementById('imgPreviewWrap').classList.add('visible');
+  dropZone.style.display = 'none';
+  setOcrStatus('Ảnh đã tải · Nhấn "Nhận diện" để bắt đầu', '');
+  clearOcrResult();
+}
+function clearImage() {
+  currentFile = null;
+  document.getElementById('imgPreview').src = '';
+  document.getElementById('imgPreviewWrap').classList.remove('visible');
+  document.getElementById('imgInput').value = '';
+  dropZone.style.display = '';
+  clearOcrResult();
+  setOcrStatus('Chọn ảnh để bắt đầu', '');
+}
+function selectLang(btn) {
+  document.querySelectorAll('.lang-chip').forEach(b => b.classList.remove('active-lang'));
+  btn.classList.add('active-lang');
+  currentLang = btn.dataset.lang;
+}
+function setOcrStatus(msg, type) {
+  document.getElementById('ocrStatusText').textContent = msg;
+  const d = document.getElementById('ocrDot');
+  d.className = 'status-dot-sm' + (type ? ' ' + type : '');
+}
+
+async function startOCR() {
+  if (!currentFile) { setOcrStatus('⚠ Vui lòng chọn ảnh trước', 'err'); setTimeout(() => setOcrStatus('Chọn ảnh để bắt đầu', ''), 2000); return; }
+  if (ocrRunning) return;
+  ocrRunning = true;
+
+  const btn = document.getElementById('ocrBtn');
+  const lbl = document.getElementById('ocrBtnLabel');
+  btn.disabled = true; lbl.textContent = 'Đang xử lý...';
+
+  const pw = document.getElementById('ocrProgressWrap');
+  const pf = document.getElementById('progressFill');
+  const pl = document.getElementById('progressLabel');
+  const pp = document.getElementById('progressPct');
+  pw.classList.add('visible');
+  document.getElementById('ocrResultBox').classList.remove('visible');
+  document.getElementById('ocrEmptyState').style.display = 'none';
+  setOcrStatus('Đang nhận diện...', 'on');
+
+  const statusMap = {
+    'loading tesseract core': 'Đang tải Tesseract...',
+    'initializing tesseract': 'Đang khởi động...',
+    'loading language traineddata': 'Đang tải dữ liệu ngôn ngữ...',
+    'initializing api': 'Khởi tạo API...',
+    'recognizing text': 'Đang nhận diện văn bản...'
+  };
+
+  try {
+    const { data } = await Tesseract.recognize(currentFile, currentLang, {
+      logger: m => {
+        if (statusMap[m.status]) pl.textContent = statusMap[m.status];
+        if (m.status === 'recognizing text') {
+          const p = Math.round(m.progress * 100);
+          pf.style.width = p + '%'; pp.textContent = p + '%';
+        }
+      }
+    });
+
+    const text = data.text.trim();
+    const conf = Math.round(data.confidence);
+    pw.classList.remove('visible');
+
+    document.getElementById('ocrResultText').value = text || '(Không nhận diện được văn bản)';
+    document.getElementById('ocrResultBox').classList.add('visible');
+
+    const cr = document.getElementById('confRow');
+    const cc = conf >= 70 ? 'high' : conf >= 40 ? 'mid' : 'low';
+    const cl = conf >= 70 ? '✓ Tin cậy cao' : conf >= 40 ? '⚡ Trung bình' : '⚠ Thấp';
+    const hanCount = (text.match(/[\u4e00-\u9fff]/g) || []).length;
+    cr.innerHTML = `<div class="conf-chip ${cc}">${cl} · ${conf}%</div><div class="conf-chip info">字 ${hanCount} ký tự Hán</div>`;
+
+    setOcrStatus(`Hoàn thành · ${hanCount} ký tự Hán · Độ chính xác ${conf}%`, 'ok');
+  } catch(err) {
+    pw.classList.remove('visible');
+    document.getElementById('ocrEmptyState').style.display = '';
+    setOcrStatus('Lỗi: ' + err.message, 'err');
+  }
+
+  ocrRunning = false; btn.disabled = false; lbl.textContent = 'Nhận diện văn bản';
+}
+
+function copyOcrResult() {
+  const t = document.getElementById('ocrResultText').value.trim(); if (!t) return;
+  navigator.clipboard.writeText(t).then(() => {
+    setOcrStatus('✓ Đã sao chép vào clipboard', 'ok');
+    setTimeout(() => setOcrStatus('Sẵn sàng', ''), 2500);
+  });
+}
+function sendToTts() {
+  const t = document.getElementById('ocrResultText').value.trim(); if (!t) return;
+  const s = t.slice(0, 500);
+  document.getElementById('inputText').value = s;
+  document.getElementById('charCounter').textContent = s.length + ' / 500';
+  document.getElementById('charCounter').className = 'char-counter' + (s.length > 450 ? ' limit' : '');
+  switchTab('tts');
+  setTtsStatus('Đã nhận văn bản từ OCR · Nhấn Đọc để bắt đầu', '');
+}
+function clearOcrResult() {
+  document.getElementById('ocrResultBox').classList.remove('visible');
+  document.getElementById('ocrResultText').value = '';
+  document.getElementById('confRow').innerHTML = '';
+  document.getElementById('ocrProgressWrap').classList.remove('visible');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('ocrEmptyState').style.display = '';
+}
+
+// ══════════════════════════════
+// VOICES GUIDE PAGE
+// ══════════════════════════════
+let voicesPageInited = false;
+
+function initVoicesPage() {
+  detectOS();
+  rescanVoices();
+}
+
+function detectOS() {
+  const ua = navigator.userAgent;
+  let os = 'windows';
+  if (/Mac/.test(ua) && !/iPhone|iPad/.test(ua)) os = 'mac';
+  else if (/Linux|Android/.test(ua)) os = 'linux';
+
+  const icons   = { windows: '🪟', mac: '🍎', linux: '🐧' };
+  const labels  = { windows: 'Máy tính Windows đã được phát hiện', mac: 'Máy tính macOS đã được phát hiện', linux: 'Linux / Android đã được phát hiện' };
+  const subs    = { windows: 'Làm theo hướng dẫn bên dưới để cài giọng qua Settings', mac: 'Làm theo hướng dẫn bên dưới trong System Settings', linux: 'Xem hướng dẫn cài engine TTS bên dưới' };
+
+  document.getElementById('osIcon').textContent = icons[os];
+  document.getElementById('osDetectedLabel').textContent = labels[os];
+  document.getElementById('osDetectedSub').textContent = subs[os];
+  selectOS(os);
+}
+
+function selectOS(os) {
+  document.querySelectorAll('.os-tab').forEach(b => b.classList.toggle('active', b.dataset.os === os));
+  document.querySelectorAll('.os-panel').forEach(p => p.style.display = 'none');
+  const panel = document.getElementById('panel-' + os);
+  if (panel) panel.style.display = '';
+}
+
+function rescanVoices() {
+  const doScan = () => {
+    const all = window.speechSynthesis.getVoices();
+    const zh  = all.filter(v => v.lang.startsWith('zh') || v.lang.startsWith('cmn') || v.lang.startsWith('yue'));
+
+    document.getElementById('zhVoiceCount').textContent = zh.length;
+    document.getElementById('totalVoiceCount').textContent = `trong tổng số ${all.length} giọng trên máy`;
+
+    const list = document.getElementById('voiceCheckList');
+    if (!zh.length) {
+      list.innerHTML = `
+        <div style="text-align:center;padding:24px 12px;">
+          <div style="font-size:24px;margin-bottom:8px;opacity:0.4;">😔</div>
+          <div style="font-size:13px;color:var(--text-muted);">Chưa tìm thấy giọng tiếng Trung</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-top:6px;">Làm theo hướng dẫn bên trái để cài thêm</div>
+        </div>`;
+      document.getElementById('zhVoiceCount').style.color = 'var(--red)';
+      return;
+    }
+
+    document.getElementById('zhVoiceCount').style.color = 'var(--accent-light)';
+    list.innerHTML = zh.map(v => `
+      <div class="vcheck-item">
+        <div class="vcheck-dot"></div>
+        <div class="vcheck-name">${v.name}</div>
+        <div class="vcheck-lang">${v.lang}</div>
+      </div>`).join('');
+
+    // Also refresh TTS page voice list
+    loadVoices();
+  };
+
+  if (window.speechSynthesis.getVoices().length > 0) {
+    doScan();
+  } else {
+    window.speechSynthesis.onvoiceschanged = doScan;
+    setTimeout(doScan, 800);
+  }
+}
+
+function openLink(url) {
+  try { window.location.href = url; } catch(e) {}
+}
+</script>
+</body>
+</html>
