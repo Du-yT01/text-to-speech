@@ -321,44 +321,95 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
 
           <!-- Model selector -->
           <div class="card">
-            <div class="sec">Chọn giọng đọc (Piper ONNX)</div>
-            <div style="display:flex;flex-direction:column;gap:7px;" id="modelList">
+            <div class="sec">Chọn giọng đọc</div>
 
-              <div class="model-opt active" id="mo-0" onclick="pickModel('zh_CN-huayan-medium',this)">
+            <!-- Group: Offline (Piper) -->
+            <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:flex;align-items:center;gap:7px;">
+              <span style="background:rgba(82,201,122,.12);color:var(--green);border:1px solid rgba(82,201,122,.22);border-radius:4px;padding:1px 7px;font-size:9px;font-weight:700;">OFFLINE</span>
+              Piper ONNX — không cần internet
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+              <div class="model-opt active" id="mo-0" onclick="pickModel(0,this)">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <div class="vdot"></div>
                   <div style="flex:1;">
-                    <div style="font-size:13px;font-weight:600;color:var(--text);">Huayan — Nữ, Phổ thông</div>
-                    <div style="font-size:11px;color:var(--muted);margin-top:1px;">Chất lượng cao · ~65 MB · zh_CN</div>
+                    <div style="font-size:13px;font-weight:600;">Huayan Medium — Nữ</div>
+                    <div style="font-size:11px;color:var(--muted);">Phổ thông · Chất lượng cao · ~65 MB</div>
                   </div>
-                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-                    <span style="font-size:10px;background:rgba(82,201,122,.1);color:var(--green);border:1px solid rgba(82,201,122,.22);border-radius:4px;padding:2px 7px;">★ Khuyến nghị</span>
-                    <span id="ms-0" style="font-size:10px;color:var(--dim);"></span>
-                  </div>
+                  <span id="ms-0" style="font-size:10px;color:var(--dim);"></span>
                 </div>
               </div>
-
-              <div class="model-opt" id="mo-1" onclick="pickModel('zh_CN-huayan-x_low',this)">
+              <div class="model-opt" id="mo-1" onclick="pickModel(1,this)">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <div class="vdot"></div>
                   <div style="flex:1;">
-                    <div style="font-size:13px;font-weight:600;color:var(--text);">Huayan — Nữ, Nhẹ</div>
-                    <div style="font-size:11px;color:var(--muted);margin-top:1px;">Tải nhanh · ~5 MB · zh_CN</div>
+                    <div style="font-size:13px;font-weight:600;">Huayan X-Low — Nữ</div>
+                    <div style="font-size:11px;color:var(--muted);">Phổ thông · Nhẹ & nhanh · ~5 MB</div>
                   </div>
-                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-                    <span style="font-size:10px;background:rgba(62,201,192,.1);color:var(--teal);border:1px solid rgba(62,201,192,.22);border-radius:4px;padding:2px 7px;">⚡ Nhanh</span>
-                    <span id="ms-1" style="font-size:10px;color:var(--dim);"></span>
-                  </div>
+                  <span id="ms-1" style="font-size:10px;color:var(--dim);"></span>
                 </div>
               </div>
-
             </div>
 
-            <!-- Model status + download progress -->
+            <!-- Group: Online (MMS via HF) -->
+            <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;display:flex;align-items:center;gap:7px;">
+              <span style="background:rgba(124,111,247,.12);color:var(--alight);border:1px solid rgba(124,111,247,.22);border-radius:4px;padding:1px 7px;font-size:9px;font-weight:700;">ONLINE</span>
+              MMS — Facebook · Cần internet · Không cần cài
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="model-opt" id="mo-2" onclick="pickModel(2,this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">MMS — Phổ thông 普通话</div>
+                    <div style="font-size:11px;color:var(--muted);">Mandarin · facebook/mms-tts-zho</div>
+                  </div>
+                  <span style="font-size:10px;background:rgba(124,111,247,.1);color:var(--alight);border:1px solid rgba(124,111,247,.22);border-radius:4px;padding:2px 7px;">★ Nhiều giọng</span>
+                </div>
+              </div>
+              <div class="model-opt" id="mo-3" onclick="pickModel(3,this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">MMS — Quảng Đông 粵語</div>
+                    <div style="font-size:11px;color:var(--muted);">Cantonese · facebook/mms-tts-yue</div>
+                  </div>
+                </div>
+              </div>
+              <div class="model-opt" id="mo-4" onclick="pickModel(4,this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">MMS — Thượng Hải 吴语</div>
+                    <div style="font-size:11px;color:var(--muted);">Wu · facebook/mms-tts-wuu</div>
+                  </div>
+                </div>
+              </div>
+              <div class="model-opt" id="mo-5" onclick="pickModel(5,this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">MMS — Đài Loan 台語</div>
+                    <div style="font-size:11px;color:var(--muted);">Min Nan · facebook/mms-tts-nan-tw</div>
+                  </div>
+                </div>
+              </div>
+              <div class="model-opt" id="mo-6" onclick="pickModel(6,this)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="vdot"></div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px;font-weight:600;">MMS — Khách Gia 客家話</div>
+                    <div style="font-size:11px;color:var(--muted);">Hakka · facebook/mms-tts-hak-tw</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status + progress -->
             <div class="divider"></div>
             <div class="sbar">
               <div class="sdot" id="vitsDot"></div>
-              <span id="vitsMsg" style="font-size:12px;color:var(--muted);flex:1;">Nhấn "Tải model" để bắt đầu</span>
+              <span id="vitsMsg" style="font-size:12px;color:var(--muted);flex:1;">Chọn giọng để bắt đầu</span>
             </div>
             <div id="dlWrap" style="display:none;flex-direction:column;gap:5px;margin-top:8px;">
               <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
@@ -371,21 +422,15 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
           <!-- Actions card -->
           <div class="card">
             <div class="sec">Thao tác</div>
-
-            <!-- Synth progress -->
             <div id="synWrap" style="display:none;flex-direction:column;gap:5px;margin-bottom:10px;">
               <div style="font-size:11px;color:var(--muted);" id="synLbl">Đang tổng hợp...</div>
               <div class="prog-bg"><div class="prog-fill green ind"></div></div>
             </div>
-
             <div style="display:flex;flex-direction:column;gap:8px;">
-              <!-- Load model button -->
               <button class="btn btn-ghost" id="loadBtn" onclick="loadModel()" style="width:100%;justify-content:center;gap:8px;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <span id="loadLbl">Tải model</span>
+                <span id="loadLbl">Tải model Piper</span>
               </button>
-
-              <!-- Preview + Export row -->
               <div style="display:flex;gap:8px;">
                 <button class="btn btn-acc" id="previewBtn" onclick="doPreview()" disabled
                   style="flex:1;background:rgba(124,111,247,.15);color:var(--alight);border:1px solid rgba(124,111,247,.3);">
@@ -399,11 +444,8 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
                 </button>
               </div>
             </div>
-
-            <!-- Result -->
             <div id="expRes" style="display:none;margin-top:10px;"></div>
-
-            <div class="info-box" style="margin-top:10px;">Piper ONNX · Chạy 100% offline trong trình duyệt · Nghe và xuất cùng một giọng · Model cache vĩnh viễn sau lần tải đầu</div>
+            <div class="info-box" style="margin-top:10px;" id="engineInfo">Chọn giọng để xem hướng dẫn</div>
           </div>
 
           <!-- Global status -->
@@ -676,33 +718,56 @@ function copyTts() {
   });
 }
 
-// ══ VITS / PIPER ENGINE ══
+// ══ VITS / PIPER + MMS ENGINE ══
 const VITS_CDN = 'https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/dist/vits-web.js';
-let vModel = 'zh_CN-huayan-medium', vReady = false, vLoading = false, vitsMod = null;
-let previewAudio = null, previewing = false;
+const HF_API   = 'https://api-inference.huggingface.co/models/';
 
-// Cache status per model: 'cached' | 'uncached' | 'unknown'
+// Voice definitions — index matches mo-N ids
+const VOICES = [
+  { id: 'zh_CN-huayan-medium', engine: 'piper', label: 'Huayan Medium',   size: '~65 MB' },
+  { id: 'zh_CN-huayan-x_low',  engine: 'piper', label: 'Huayan X-Low',    size: '~5 MB'  },
+  { id: 'facebook/mms-tts-zho',    engine: 'mms', label: 'MMS Phổ thông'   },
+  { id: 'facebook/mms-tts-yue',    engine: 'mms', label: 'MMS Quảng Đông'  },
+  { id: 'facebook/mms-tts-wuu',    engine: 'mms', label: 'MMS Thượng Hải'  },
+  { id: 'facebook/mms-tts-nan-tw', engine: 'mms', label: 'MMS Đài Loan'    },
+  { id: 'facebook/mms-tts-hak-tw', engine: 'mms', label: 'MMS Khách Gia'   },
+];
+
+let vIdx = 0, vReady = false, vLoading = false, vitsMod = null;
+let previewAudio = null, previewing = false;
 const modelCache = {};
 
-function pickModel(id, el) {
+function currentVoice() { return VOICES[vIdx]; }
+
+function pickModel(idx, el) {
   if (vLoading) return;
-  // If switching to a different model, reset ready state
-  if (id !== vModel) {
-    vModel = id;
-    vReady = false;
-    previewBtn.disabled = true;
-    exportBtn.disabled = true;
-    stopPreview();
-    const stat = modelCache[id];
-    if (stat === 'cached') {
-      setVits('ok', '✓ Model đã cache · Nhấn "Tải model" để kích hoạt');
-    } else {
-      setVits('', 'Nhấn "Tải model" để chuẩn bị');
-    }
-    loadLbl.textContent = 'Tải model';
-  }
+  const prev = vIdx;
+  vIdx = idx;
   document.querySelectorAll('.model-opt').forEach(e => e.classList.remove('active'));
   el.classList.add('active');
+
+  const v = currentVoice();
+  stopPreview();
+
+  if (v.engine === 'piper') {
+    loadBtn.style.display = '';
+    loadLbl.textContent = 'Tải model Piper';
+    if (modelCache[v.id] === 'cached') {
+      vReady = true;
+      previewBtn.disabled = false; exportBtn.disabled = false;
+      setVits('ok', '✓ Model sẵn sàng · ' + v.label);
+    } else {
+      vReady = false; previewBtn.disabled = true; exportBtn.disabled = true;
+      setVits('', 'Nhấn "Tải model" để chuẩn bị · ' + (v.size || ''));
+    }
+    engineInfo.textContent = 'Piper ONNX · Chạy 100% offline · Nghe và xuất cùng 1 giọng · Cache vĩnh viễn';
+  } else {
+    // MMS: no download needed, just need internet
+    loadBtn.style.display = 'none';
+    vReady = true; previewBtn.disabled = false; exportBtn.disabled = false;
+    setVits('ok', '✓ Sẵn sàng · ' + v.label + ' · Cần internet');
+    engineInfo.textContent = 'MMS (Facebook) · Cần internet · Không cần cài · Tổng hợp trực tiếp qua HuggingFace API';
+  }
 }
 
 function setVits(type, msg) {
@@ -710,72 +775,71 @@ function setVits(type, msg) {
   vitsMsg.textContent = msg;
 }
 
-// Check cache status for all models on load
+// ── Piper: check cache on load ──
 async function checkAllCached() {
   try {
     const tts = await import(VITS_CDN);
     vitsMod = tts;
     const cached = await tts.stored();
-    ['zh_CN-huayan-medium', 'zh_CN-huayan-x_low'].forEach((id, i) => {
-      modelCache[id] = cached.includes(id) ? 'cached' : 'uncached';
+    VOICES.filter(v => v.engine === 'piper').forEach((v, i) => {
+      modelCache[v.id] = cached.includes(v.id) ? 'cached' : 'uncached';
       const el = document.getElementById('ms-' + i);
-      if (el) el.textContent = cached.includes(id) ? '✓ Đã cache' : '';
+      if (el) el.textContent = cached.includes(v.id) ? '✓ Đã cache' : '';
     });
-    if (cached.includes(vModel)) {
-      vReady = true;
-      previewBtn.disabled = false;
-      exportBtn.disabled = false;
-      setVits('ok', '✓ Model sẵn sàng · ' + vModel);
+    // If current model is piper and cached, enable buttons
+    const cv = currentVoice();
+    if (cv.engine === 'piper' && modelCache[cv.id] === 'cached') {
+      vReady = true; previewBtn.disabled = false; exportBtn.disabled = false;
+      setVits('ok', '✓ Model sẵn sàng · ' + cv.label);
       loadLbl.textContent = 'Tải lại';
-    } else {
-      setVits('', 'Nhấn "Tải model" để chuẩn bị');
+    } else if (cv.engine === 'piper') {
+      setVits('', 'Nhấn "Tải model" để chuẩn bị · ' + (cv.size || ''));
     }
   } catch (e) {
     setVits('', 'Nhấn "Tải model" để chuẩn bị');
   }
 }
 
+// ── Piper: download model ──
 async function loadModel() {
+  const v = currentVoice();
+  if (v.engine !== 'piper') return;
   if (vLoading) return;
-  vLoading = true;
-  loadBtn.disabled = true;
-  dlWrap.style.display = 'flex';
-  dlFill.style.width = '5%';
-  dlLbl.textContent = 'Đang tải thư viện Piper WASM...';
-  dlPct.textContent = '';
+  vLoading = true; loadBtn.disabled = true;
+  dlWrap.style.display = 'flex'; dlFill.style.width = '5%';
+  dlLbl.textContent = 'Đang tải thư viện Piper...'; dlPct.textContent = '';
   setVits('', 'Đang tải thư viện...');
   try {
     if (!vitsMod) vitsMod = await import(VITS_CDN);
     const cached = await vitsMod.stored();
-    if (cached.includes(vModel)) {
+    if (cached.includes(v.id)) {
       dlWrap.style.display = 'none';
+      modelCache[v.id] = 'cached';
       vReady = true;
-      setVits('ok', '✓ Model sẵn sàng · ' + vModel);
-      previewBtn.disabled = false;
-      exportBtn.disabled = false;
+      setVits('ok', '✓ Model sẵn sàng · ' + v.label);
+      previewBtn.disabled = false; exportBtn.disabled = false;
       loadLbl.textContent = 'Tải lại';
+      // update badge
+      const idx = VOICES.findIndex(x => x.id === v.id);
+      const ms = document.getElementById('ms-' + idx);
+      if (ms) ms.textContent = '✓ Đã cache';
     } else {
-      setVits('', 'Đang tải model từ HuggingFace...');
-      dlLbl.textContent = 'Đang tải model Piper...';
-      await vitsMod.download(vModel, p => {
+      dlLbl.textContent = 'Đang tải model (' + (v.size || '') + ')...';
+      setVits('', 'Đang tải từ HuggingFace...');
+      await vitsMod.download(v.id, p => {
         if (p.total) {
-          const pct = Math.round(25 + (p.loaded / p.total) * 72);
-          dlFill.style.width = pct + '%';
-          dlPct.textContent = pct + '%';
-          dlLbl.textContent = 'Đang tải... ' + Math.round(p.loaded / 1024 / 1024 * 10) / 10 + ' / ' + Math.round(p.total / 1024 / 1024) + ' MB';
+          const pct = Math.round(10 + (p.loaded / p.total) * 87);
+          dlFill.style.width = pct + '%'; dlPct.textContent = pct + '%';
+          dlLbl.textContent = 'Đang tải... ' + Math.round(p.loaded/1024/1024*10)/10 + ' / ' + Math.round(p.total/1024/1024) + ' MB';
         }
       });
       dlWrap.style.display = 'none';
-      vReady = true;
-      modelCache[vModel] = 'cached';
-      // Update cache badge
-      ['zh_CN-huayan-medium', 'zh_CN-huayan-x_low'].forEach((id, i) => {
-        const el = document.getElementById('ms-' + i);
-        if (el && id === vModel) el.textContent = '✓ Đã cache';
-      });
-      setVits('ok', '✓ Model sẵn sàng · ' + vModel + ' · Đã lưu vĩnh viễn');
-      previewBtn.disabled = false;
-      exportBtn.disabled = false;
+      modelCache[v.id] = 'cached'; vReady = true;
+      const idx = VOICES.findIndex(x => x.id === v.id);
+      const ms = document.getElementById('ms-' + idx);
+      if (ms) ms.textContent = '✓ Đã cache';
+      setVits('ok', '✓ Model sẵn sàng · ' + v.label + ' · Đã lưu vĩnh viễn');
+      previewBtn.disabled = false; exportBtn.disabled = false;
       loadLbl.textContent = 'Tải lại';
     }
   } catch (err) {
@@ -784,59 +848,85 @@ async function loadModel() {
     expRes.style.display = '';
     expRes.innerHTML = `<div class="err-box">✕ Lỗi tải model<br><span style="color:var(--muted);font-size:11px;">${err.message}</span></div>`;
   }
-  vLoading = false;
-  loadBtn.disabled = false;
+  vLoading = false; loadBtn.disabled = false;
 }
 
-// Synthesize and return WAV blob (shared by preview + export)
+// ── Decode FLAC → WAV using Web Audio API ──
+async function flacToWav(arrayBuffer) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const decoded  = await audioCtx.decodeAudioData(arrayBuffer);
+  audioCtx.close();
+  // Extract PCM from first channel
+  const pcm = decoded.getChannelData(0);
+  const sr  = decoded.sampleRate;
+  // Encode WAV
+  const len = pcm.length, buf = new ArrayBuffer(44 + len * 2), dv = new DataView(buf);
+  const w = (o, s) => { for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i)); };
+  w(0,'RIFF'); dv.setUint32(4,36+len*2,true); w(8,'WAVE'); w(12,'fmt ');
+  dv.setUint32(16,16,true); dv.setUint16(20,1,true); dv.setUint16(22,1,true);
+  dv.setUint32(24,sr,true); dv.setUint32(28,sr*2,true); dv.setUint16(32,2,true); dv.setUint16(34,16,true);
+  w(36,'data'); dv.setUint32(40,len*2,true);
+  for (let i = 0, o = 44; i < len; i++, o += 2) {
+    const x = Math.max(-1, Math.min(1, pcm[i]));
+    dv.setInt16(o, x < 0 ? x * 0x8000 : x * 0x7FFF, true);
+  }
+  return new Blob([buf], { type: 'audio/wav' });
+}
+
+// ── Unified synthesize ──
 async function synthesize(txt) {
-  if (!vReady || !vitsMod) throw new Error('Model chưa sẵn sàng');
-  return await vitsMod.predict({ text: txt, voiceId: vModel });
+  const v = currentVoice();
+  if (v.engine === 'piper') {
+    if (!vitsMod) throw new Error('Piper chưa tải');
+    return await vitsMod.predict({ text: txt, voiceId: v.id }); // returns Blob
+  } else {
+    // MMS via HuggingFace Inference API
+    synLbl.textContent = 'Đang gọi HuggingFace API...';
+    const resp = await fetch(HF_API + v.id, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ inputs: txt })
+    });
+    if (!resp.ok) {
+      const errText = await resp.text().catch(() => '');
+      if (resp.status === 503) throw new Error('Model đang khởi động, thử lại sau 20 giây');
+      if (resp.status === 429) throw new Error('Quá nhiều yêu cầu, thử lại sau vài giây');
+      throw new Error('HF API lỗi ' + resp.status + ': ' + errText.slice(0, 100));
+    }
+    synLbl.textContent = 'Đang xử lý audio...';
+    const arrayBuf = await resp.arrayBuffer();
+    return await flacToWav(arrayBuf); // convert FLAC → WAV Blob
+  }
 }
 
-// Preview — play directly in browser
+// ── Preview ──
 async function doPreview() {
   if (previewing) { stopPreview(); return; }
   const txt = txEl.value.trim();
   if (!txt) { setTxtStatus('⚠ Nhập văn bản trước', 'err'); setTimeout(() => setTxtStatus('Sẵn sàng', ''), 2000); return; }
   if (!vReady) { await loadModel(); return; }
-
-  previewBtn.disabled = true;
-  exportBtn.disabled = true;
-  synWrap.style.display = 'flex';
-  synLbl.textContent = 'Đang tổng hợp để nghe thử...';
+  previewBtn.disabled = true; exportBtn.disabled = true;
+  synWrap.style.display = 'flex'; synLbl.textContent = 'Đang tổng hợp...';
   setTxtStatus('Đang tổng hợp...', 'on');
-
   try {
     const wavBlob = await synthesize(txt);
     synWrap.style.display = 'none';
     const url = URL.createObjectURL(wavBlob);
-
     previewAudio = new Audio(url);
     previewing = true;
-    prvIco.setAttribute('viewBox', '0 0 24 24');
     prvIco.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-    prvIco.setAttribute('fill', 'currentColor');
     prvLbl.textContent = 'Dừng';
     previewBtn.disabled = false;
-
-    setTxtStatus('Đang phát · ' + vModel, 'on');
-
-    previewAudio.onended = () => {
-      stopPreview();
-      URL.revokeObjectURL(url);
-      setTxtStatus('Hoàn thành · ' + vModel, 'ok');
-    };
+    setTxtStatus('Đang phát · ' + currentVoice().label, 'on');
+    previewAudio.onended = () => { stopPreview(); URL.revokeObjectURL(url); setTxtStatus('Hoàn thành', 'ok'); };
     previewAudio.onerror = () => { stopPreview(); URL.revokeObjectURL(url); };
     previewAudio.play();
-
   } catch (err) {
     synWrap.style.display = 'none';
     setTxtStatus('Lỗi: ' + err.message, 'err');
-    vReady = false; vitsMod = null;
-    previewBtn.disabled = true; exportBtn.disabled = true;
-    loadLbl.textContent = 'Tải model';
-    setVits('err', 'Lỗi — nhấn "Tải model" để thử lại');
+    expRes.style.display = '';
+    expRes.innerHTML = `<div class="err-box">✕ ${err.message}</div>`;
+    previewBtn.disabled = false;
   }
   exportBtn.disabled = false;
 }
@@ -844,7 +934,6 @@ async function doPreview() {
 function stopPreview() {
   if (previewAudio) { previewAudio.pause(); previewAudio.src = ''; previewAudio = null; }
   previewing = false;
-  prvIco.setAttribute('viewBox', '0 0 24 24');
   prvIco.innerHTML = '<path d="M8 5v14l11-7z"/>';
   prvLbl.textContent = 'Nghe thử';
   previewBtn.disabled = !vReady;
@@ -852,9 +941,12 @@ function stopPreview() {
 }
 function setWave(on) {
   document.querySelectorAll('.wv').forEach(d =>
-    on ? d.classList.add('on') : (d.classList.remove('on'), d.style.height = '3px')
-  );
+    on ? d.classList.add('on') : (d.classList.remove('on'), d.style.height = '3px'));
 }
+
+// Init
+pickModel(0, document.getElementById('mo-0'));
+setTimeout(checkAllCached, 600);
 
 async function doExport(){
   const txt = txEl.value.trim();
@@ -877,7 +969,7 @@ async function doExport(){
     const sizeKB = Math.round(wavBlob.size / 1024);
 
     saveHistory({
-      id: Date.now(), text: txt, model: vModel,
+      id: Date.now(), text: txt, model: currentVoice().label,
       fname: fname, sizeKB: sizeKB, ts: Date.now(),
       blobData: await blobToBase64(wavBlob)
     });
@@ -892,13 +984,13 @@ async function doExport(){
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <div>
             <div style="font-size:12px;font-weight:600;color:var(--green);">✓ Đã tải xuống thành công</div>
-            <div style="font-size:11px;color:var(--muted);">${fname} · ${sizeKB} KB · WAV · ${vModel}</div>
+            <div style="font-size:11px;color:var(--muted);">${fname} · ${sizeKB} KB · WAV · ${currentVoice().label}</div>
           </div>
         </div>
         <audio controls src="${url}" style="width:100%;height:32px;accent-color:var(--green);"></audio>
       </div>`;
     setTimeout(() => URL.revokeObjectURL(url), 120000);
-    setTxtStatus('✓ WAV ' + sizeKB + ' KB · ' + vModel, 'ok');
+    setTxtStatus('✓ WAV ' + sizeKB + ' KB · ' + currentVoice().label, 'ok');
   } catch (err) {
     synWrap.style.display = 'none';
     expRes.style.display = '';
