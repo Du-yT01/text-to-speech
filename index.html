@@ -262,9 +262,12 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     Lịch sử xuất file
   </div>
+  <div class="nav-item" id="nav-deploy" onclick="go('deploy')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2H3v16h5v4l4-4h5l4-4V2z"/><path d="M11 11V7M15 11V7M7 11V7"/></svg>
+    Deploy lên web
+  </div>
   <div class="sidebar-foot">
-    Hoạt động offline<br>
-    <span>Piper ONNX</span><span>Tesseract</span>
+    <span id="envBadge">Đang kiểm tra...</span>
   </div>
 </aside>
 
@@ -667,6 +670,116 @@ kbd{background:var(--card3);border:1px solid var(--border2);border-radius:4px;pa
 
     </div><!-- /history -->
 
+    <!-- ══════════ DEPLOY PAGE ══════════ -->
+    <div class="page" id="pageDeploy">
+
+      <!-- Environment banner -->
+      <div id="envBanner" style="border-radius:var(--R);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px;"></div>
+
+      <div class="cols2" style="align-items:start;gap:20px;">
+
+        <!-- LEFT: Netlify Drop (easiest) -->
+        <div>
+          <div class="card" style="border-color:rgba(0,196,204,.3);">
+            <div class="sec" style="color:var(--teal);">⚡ Netlify Drop — Dễ nhất, không cần tài khoản</div>
+            <div style="display:flex;flex-direction:column;gap:14px;">
+
+              <div class="step">
+                <div class="stepn">1</div>
+                <div>
+                  <div class="step-t">Tải file HTML về máy</div>
+                  <div class="step-d">Lưu file <code>chinese-tts.html</code> vào một thư mục trống, ví dụ <code>chinese-tts/</code></div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="stepn">2</div>
+                <div>
+                  <div class="step-t">Mở Netlify Drop</div>
+                  <div class="step-d">Truy cập <strong>app.netlify.com/drop</strong> — không cần đăng ký</div>
+                  <button class="btn btn-ghost" onclick="window.open('https://app.netlify.com/drop','_blank')"
+                    style="margin-top:8px;padding:8px 16px;font-size:12px;gap:7px;color:var(--teal);border-color:rgba(0,196,204,.3);">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Mở Netlify Drop
+                  </button>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="stepn">3</div>
+                <div>
+                  <div class="step-t">Kéo thả thư mục vào trang</div>
+                  <div class="step-d">Kéo thư mục <code>chinese-tts/</code> vào vùng kéo thả của Netlify Drop</div>
+                </div>
+              </div>
+
+              <div class="step" style="border:none;">
+                <div class="stepn" style="background:rgba(82,201,122,.15);border-color:rgba(82,201,122,.3);color:var(--green);">✓</div>
+                <div>
+                  <div class="step-t" style="color:var(--green);">Xong! Có link https:// ngay lập tức</div>
+                  <div class="step-d">Netlify tạo link dạng <code>random-name.netlify.app</code> — tất cả 7 giọng hoạt động, có thể chia sẻ cho người khác</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- GitHub Pages -->
+          <div class="card" style="margin-top:16px;">
+            <div class="sec">GitHub Pages — Có link cố định</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="step"><div class="stepn">1</div><div><div class="step-t">Tạo repository mới trên GitHub</div><div class="step-d">Vào <strong>github.com/new</strong> → đặt tên repo → chọn Public → Create</div></div></div>
+              <div class="step"><div class="stepn">2</div><div><div class="step-t">Upload file HTML</div><div class="step-d">Trong repo → <strong>Add file → Upload files</strong> → kéo thả <code>chinese-tts.html</code> → đổi tên thành <code>index.html</code> → Commit</div></div></div>
+              <div class="step"><div class="stepn">3</div><div><div class="step-t">Bật GitHub Pages</div><div class="step-d">Settings → Pages → Source: <strong>Deploy from branch</strong> → Branch: <code>main</code> → Save</div></div></div>
+              <div class="step" style="border:none;"><div class="stepn" style="background:rgba(82,201,122,.15);border-color:rgba(82,201,122,.3);color:var(--green);">✓</div><div><div class="step-t" style="color:var(--green);">Link: username.github.io/repo-name</div><div class="step-d">Mất ~1 phút để build. Link cố định, miễn phí vĩnh viễn.</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Vercel + FAQ -->
+        <div>
+          <!-- Vercel -->
+          <div class="card">
+            <div class="sec">Vercel — Tốc độ nhanh nhất</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div class="step"><div class="stepn">1</div><div><div class="step-t">Cài Vercel CLI</div><div class="step-d"><div class="code-blk">npm i -g vercel</div></div></div></div>
+              <div class="step"><div class="stepn">2</div><div><div class="step-t">Deploy từ thư mục</div><div class="step-d"><div class="code-blk">cd chinese-tts/<br>vercel --prod</div></div></div></div>
+              <div class="step" style="border:none;"><div class="stepn" style="background:rgba(82,201,122,.15);border-color:rgba(82,201,122,.3);color:var(--green);">✓</div><div><div class="step-t" style="color:var(--green);">Link: project.vercel.app</div><div class="step-d">CDN toàn cầu, HTTPS tự động.</div></div></div>
+            </div>
+          </div>
+
+          <!-- Why https matters -->
+          <div class="card" style="margin-top:16px;">
+            <div class="sec">Tại sao cần deploy?</div>
+            <div style="display:flex;flex-direction:column;gap:10px;font-size:12px;color:var(--muted);line-height:1.75;">
+              <div style="background:var(--card2);border-radius:var(--Rs);padding:12px 14px;border:1px solid var(--border);">
+                <div style="color:var(--red);font-weight:600;margin-bottom:4px;">❌ Mở file:// trực tiếp</div>
+                Trình duyệt chặn <strong style="color:var(--text);">CORS</strong> — không thể gọi HuggingFace API từ địa chỉ <code>file://</code>.<br>
+                Piper offline vẫn hoạt động, nhưng các giọng MMS bị lỗi "Failed to fetch".
+              </div>
+              <div style="background:rgba(82,201,122,.06);border-radius:var(--Rs);padding:12px 14px;border:1px solid rgba(82,201,122,.2);">
+                <div style="color:var(--green);font-weight:600;margin-bottom:4px;">✓ Chạy trên https://</div>
+                HuggingFace API cho phép gọi từ bất kỳ domain <code>https://</code> nào.<br>
+                Tất cả 7 giọng hoạt động — Piper offline + 5 giọng MMS online.
+              </div>
+              <div style="background:var(--card2);border-radius:var(--Rs);padding:12px 14px;border:1px solid var(--border);">
+                <div style="color:var(--amber);font-weight:600;margin-bottom:4px;">⚡ Chỉ cần 1 lần deploy</div>
+                Sau khi có link <code>https://</code>, chia sẻ cho bất kỳ ai — họ mở link là dùng được ngay, không cần cài gì.
+              </div>
+            </div>
+          </div>
+
+          <!-- Current env info -->
+          <div class="card" style="margin-top:16px;">
+            <div class="sec">Môi trường hiện tại</div>
+            <div id="envDetail" style="font-size:12px;color:var(--muted);line-height:1.8;"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /deploy -->
+
   </div><!-- content -->
 </div><!-- main -->
 
@@ -677,10 +790,10 @@ function autoResize(el){
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
 }
-const PAGES={tts:'Văn bản → Giọng nói',ocr:'Ảnh → Văn bản (OCR)',voices:'Thêm giọng nói',history:'Lịch sử xuất file'};
-const SUBS={tts:'Nhập chữ Hán, chọn giọng và nhấn Đọc',ocr:'Tải ảnh chứa chữ Hán, nhận diện và sao chép',voices:'Hướng dẫn cài thêm giọng tiếng Trung miễn phí',history:'Xem lại và tải lại các file WAV đã tổng hợp'};
+const PAGES={tts:'Văn bản → Giọng nói',ocr:'Ảnh → Văn bản (OCR)',voices:'Thêm giọng nói',history:'Lịch sử xuất file',deploy:'Deploy lên web'};
+const SUBS={tts:'Nhập chữ Hán, chọn giọng và nhấn Đọc',ocr:'Tải ảnh chứa chữ Hán, nhận diện và sao chép',voices:'Hướng dẫn cài thêm giọng tiếng Trung miễn phí',history:'Xem lại và tải lại các file WAV đã tổng hợp',deploy:'Đưa app lên https:// để dùng tất cả 7 giọng'};
 function go(tab){
-  ['tts','ocr','voices','history'].forEach(t=>{
+  ['tts','ocr','voices','history','deploy'].forEach(t=>{
     const pg=document.getElementById('page'+t.charAt(0).toUpperCase()+t.slice(1));
     if(pg) pg.classList.toggle('on',t===tab);
     const nav=document.getElementById('nav-'+t);
@@ -690,7 +803,91 @@ function go(tab){
   document.getElementById('tb-sub').textContent=SUBS[tab];
   if(tab==='voices'){detectOS();rescan();}
   if(tab==='history'){renderHistory();}
+  if(tab==='deploy'){renderEnvDetail();}
 }
+
+// ══ ENV DETECTION ══
+function getEnv(){
+  const proto=location.protocol;
+  const host=location.hostname;
+  if(proto==='https:') return 'https';
+  if(proto==='http:' && (host==='localhost'||host==='127.0.0.1')) return 'localhost';
+  if(proto==='file:') return 'file';
+  return 'http';
+}
+
+function initEnvBadge(){
+  const env=getEnv();
+  const badge=document.getElementById('envBadge');
+  if(!badge) return;
+  if(env==='https'){
+    badge.innerHTML='<span style="color:var(--green);font-size:11px;">✓ https:// · Tất cả giọng OK</span>';
+  } else if(env==='localhost'){
+    badge.innerHTML='<span style="color:var(--amber);font-size:11px;">⚡ localhost · Server local</span>';
+  } else {
+    badge.innerHTML='<span style="color:var(--red);font-size:11px;cursor:pointer;" onclick="go(\'deploy\')">⚠ file:// · MMS bị chặn</span>';
+  }
+}
+
+function renderEnvBanner(){
+  const el=document.getElementById('envBanner');
+  if(!el) return;
+  const env=getEnv();
+  if(env==='https'){
+    el.style.background='rgba(82,201,122,.07)';
+    el.style.border='1px solid rgba(82,201,122,.25)';
+    el.innerHTML=`
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--green);">Bạn đang chạy trên https:// — Tất cả 7 giọng hoạt động!</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">URL: <code style="color:var(--teal);">${location.href}</code></div>
+      </div>`;
+  } else if(env==='localhost'){
+    el.style.background='rgba(245,166,35,.07)';
+    el.style.border='1px solid rgba(245,166,35,.25)';
+    el.innerHTML=`
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--amber);">Đang chạy trên localhost</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">MMS hoạt động nếu có python server. Deploy lên https:// để không cần server.</div>
+      </div>`;
+  } else {
+    el.style.background='rgba(240,106,106,.07)';
+    el.style.border='1px solid rgba(240,106,106,.25)';
+    el.innerHTML=`
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:700;color:var(--red);">Đang mở dưới dạng file:// — Giọng MMS bị chặn CORS</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Deploy lên một trong các nền tảng bên dưới để dùng tất cả 7 giọng. Piper offline vẫn hoạt động bình thường.</div>
+      </div>
+      <button class="btn btn-ghost" onclick="window.open('https://app.netlify.com/drop','_blank')" style="padding:8px 14px;font-size:12px;color:var(--teal);border-color:rgba(62,201,192,.3);white-space:nowrap;">
+        Deploy ngay →
+      </button>`;
+  }
+}
+
+function renderEnvDetail(){
+  renderEnvBanner();
+  const el=document.getElementById('envDetail');
+  if(!el) return;
+  const env=getEnv();
+  const rows=[
+    ['Protocol', location.protocol],
+    ['Host', location.hostname || '(local file)'],
+    ['URL', location.href.length>60 ? location.href.slice(0,60)+'...' : location.href],
+    ['Piper offline', '✓ Luôn hoạt động'],
+    ['Giọng MMS (5 giọng)', env==='https'?'✓ Hoạt động — CORS OK': env==='localhost'?'⚡ Cần server local':'❌ Bị chặn — cần deploy lên https://'],
+  ];
+  el.innerHTML = rows.map(([k,v])=>
+    `<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);">
+      <span style="color:var(--dim);min-width:130px;">${k}</span>
+      <span style="color:var(--text);">${v}</span>
+    </div>`
+  ).join('');
+}
+
+// Call once on load
+setTimeout(()=>{ initEnvBadge(); renderEnvBanner(); }, 100);
 
 // ══ TTS ══
 const txEl = document.getElementById('inputText');
@@ -762,11 +959,20 @@ function pickModel(idx, el) {
     }
     engineInfo.textContent = 'Piper ONNX · Chạy 100% offline · Nghe và xuất cùng 1 giọng · Cache vĩnh viễn';
   } else {
-    // MMS: no download needed, just need internet
+    // MMS: no download needed
     loadBtn.style.display = 'none';
     vReady = true; previewBtn.disabled = false; exportBtn.disabled = false;
-    setVits('ok', '✓ Sẵn sàng · ' + v.label + ' · Cần internet');
-    engineInfo.textContent = 'MMS (Facebook) · Cần internet · Không cần cài · Tổng hợp trực tiếp qua HuggingFace API';
+    const env = getEnv();
+    if (env === 'https') {
+      setVits('ok', '✓ Sẵn sàng · ' + v.label + ' · CORS OK trên https://');
+      engineInfo.textContent = 'MMS (Facebook) · Gọi trực tiếp HuggingFace · Không cần cài gì';
+    } else if (env === 'localhost') {
+      setVits('ok', '✓ Sẵn sàng · ' + v.label);
+      engineInfo.textContent = 'MMS (Facebook) · Chạy trên localhost · CORS OK';
+    } else {
+      setVits('err', '⚠ ' + v.label + ' — cần deploy lên https://');
+      engineInfo.innerHTML = 'Giọng MMS bị chặn CORS khi mở file:// · <span style="color:var(--alight);cursor:pointer;" onclick="go(\'deploy\')">Xem hướng dẫn deploy →</span>';
+    }
   }
 }
 
@@ -878,25 +1084,40 @@ async function synthesize(txt) {
   const v = currentVoice();
   if (v.engine === 'piper') {
     if (!vitsMod) throw new Error('Piper chưa tải');
-    return await vitsMod.predict({ text: txt, voiceId: v.id }); // returns Blob
-  } else {
-    // MMS via HuggingFace Inference API
-    synLbl.textContent = 'Đang gọi HuggingFace API...';
-    const resp = await fetch(HF_API + v.id, {
+    return await vitsMod.predict({ text: txt, voiceId: v.id });
+  }
+
+  // MMS via HuggingFace Inference API (CORS OK on https://, blocked on file://)
+  if (getEnv() === 'file') {
+    throw new Error(
+      'Giọng MMS không dùng được khi mở file:// trực tiếp.\n' +
+      '→ Deploy lên https:// để dùng (xem tab "Deploy lên web").\n' +
+      '→ Hoặc chọn giọng Piper Offline bên trên.'
+    );
+  }
+
+  synLbl.textContent = 'Đang gọi HuggingFace API...';
+  let resp;
+  try {
+    resp = await fetch(HF_API + v.id, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ inputs: txt })
     });
-    if (!resp.ok) {
-      const errText = await resp.text().catch(() => '');
-      if (resp.status === 503) throw new Error('Model đang khởi động, thử lại sau 20 giây');
-      if (resp.status === 429) throw new Error('Quá nhiều yêu cầu, thử lại sau vài giây');
-      throw new Error('HF API lỗi ' + resp.status + ': ' + errText.slice(0, 100));
-    }
-    synLbl.textContent = 'Đang xử lý audio...';
-    const arrayBuf = await resp.arrayBuffer();
-    return await flacToWav(arrayBuf); // convert FLAC → WAV Blob
+  } catch (e) {
+    throw new Error(
+      'Không kết nối được HuggingFace API.\n' +
+      '→ Kiểm tra kết nối internet.\n' +
+      '→ Hoặc dùng giọng Piper Offline.'
+    );
   }
+  if (!resp.ok) {
+    if (resp.status === 503) throw new Error('Model đang khởi động · Thử lại sau 20–30 giây');
+    if (resp.status === 429) throw new Error('Quá nhiều yêu cầu · Thử lại sau vài giây');
+    throw new Error('HF API lỗi ' + resp.status);
+  }
+  synLbl.textContent = 'Đang xử lý audio...';
+  return await flacToWav(await resp.arrayBuffer());
 }
 
 // ── Preview ──
@@ -923,10 +1144,13 @@ async function doPreview() {
     previewAudio.play();
   } catch (err) {
     synWrap.style.display = 'none';
-    setTxtStatus('Lỗi: ' + err.message, 'err');
+    const lines = err.message.split('\n');
+    setTxtStatus('Lỗi: ' + lines[0], 'err');
     expRes.style.display = '';
-    expRes.innerHTML = `<div class="err-box">✕ ${err.message}</div>`;
+    expRes.innerHTML = `<div class="err-box">✕ ${lines.map(l=>`<div>${l}</div>`).join('')}</div>`;
     previewBtn.disabled = false;
+    // Reset server flag so next attempt re-checks
+    if (err.message.includes('CORS') || err.message.includes('file://')) go('deploy');
   }
   exportBtn.disabled = false;
 }
